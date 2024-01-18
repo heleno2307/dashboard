@@ -1,12 +1,11 @@
 import axios from "axios";
-import dotenv from 'dotenv'
-dotenv.config();
 
-const getUser = async (user:string, password:string) => {
+
+const getUser = async (user: string, password: string) => {
   try {
-    const response = await axios.post(`${process.env.API_LOGIN}grant_type=password&username=${user}&password=${password}`,);
+    const response = await axios.post(`http://rochapecas.ddns.net:8085/PROTHEUS/REST/api/oauth2/v1/token?grant_type=password&username=${user}&password=${password}`);
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     return error.response;
   }
 };

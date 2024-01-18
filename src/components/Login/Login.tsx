@@ -45,9 +45,13 @@ const Login = ()=>{
 
     try {
       const data = await getUser(user,password);
-
       // checa se o retorno da api veio com algum erro.
-      if(!checkData(data)) return;
+      if(!checkData(data)){
+        setBtn(true);
+        inputPasswordRef.current.value = '';
+        inputUserRef.current.value = '';
+        return;
+      } 
       
       //altera os estados 
       setBtn(true);
@@ -63,6 +67,9 @@ const Login = ()=>{
     if(data.data?.code == 401){
       setBtn(true);
       showToast('erro','Usuario invalido',2000);
+      return false;
+    }else if(data?.status == 404){
+      showToast('erro','Falha de conexão',2000);
       return false;
     }else{
       return true;
