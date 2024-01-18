@@ -27,6 +27,7 @@ const Login = ()=>{
   const {showToast} = useToast();
   const {hendlerUser} = useUserContext();
   const router = useRouter()
+  const BASE_URL = process.env.NEXT_PUBLIC_API_LOGIN;
 
 
   const hendlerForm = async(ev:FormEvent)=>{
@@ -44,7 +45,8 @@ const Login = ()=>{
     } 
 
     try {
-      const data = await getUser(user,password);
+      if(!BASE_URL)return;
+      const data = await getUser(BASE_URL,user,password);
       // checa se o retorno da api veio com algum erro.
       if(!checkData(data)){
         setBtn(true);
@@ -118,4 +120,6 @@ const Login = ()=>{
     </main>
   );
 }
+
+
 export default Login;
