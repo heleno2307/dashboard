@@ -181,7 +181,7 @@ const Clients = ()=>{
          ?
             <section className={style.main}>
                <div className={style.div_title}>
-                  <h2 className={style.title}>Clientes {page} {lastPage}</h2>
+                  <h2 className={style.title}>Clientes</h2>
                </div>
                <div className={style.inputDiv}>
                   <input 
