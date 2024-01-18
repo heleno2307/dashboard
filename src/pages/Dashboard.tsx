@@ -12,7 +12,7 @@ const Dashboard = ()=>{
             <title>Dashboard</title>
             <meta name="description" content="Dashbord vendas" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <link rel="icon" href="/favicon.ico" />
+            <link rel="icon" href="favIcon.ico" />
          </Head>
          <main className={style.main_content}>
             <AllProvider>
