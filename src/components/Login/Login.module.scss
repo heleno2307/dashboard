@@ -1,0 +1,79 @@
+
+.main_login{
+   width: 100vw;
+   height: 100vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.login{
+   background-color: #f1f1f1;
+   box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.233);
+   padding: 30px 40px;
+   display: flex;
+   align-items: center;
+   flex-direction: column;
+   width: 350px;
+   gap: 20px;
+   border-radius: 10px;
+}
+.input_login{
+   display: flex;
+   gap: 5px;
+   overflow: hidden;
+   padding: 5px 10px;
+   height: 100%;
+   width: 100%;
+   border-bottom: 2px solid rgba(255, 153, 0, 0.925);
+   align-items: center;
+   justify-content: space-between;
+   flex-grow: 1;
+   
+ 
+   input{
+      outline: none;
+      border: none;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0);
+      padding: 5px;
+      transition: all 0.5s;
+   }
+   .icon_login{
+      font-size: 20px;
+      
+   }
+
+}
+.btn_login{
+   margin-top: 15px;
+   display: flex;
+   align-items: center;
+   padding: 5px 15px;
+   background-color: rgba(255, 153, 0, 0.925);
+   outline: none;
+   cursor: pointer;
+   border: none;
+   min-width: 100px;
+   border-radius: 10px;
+   justify-content: center;
+   gap: 5px;
+   transition: all 0.4s;
+   &:hover{
+      background-color: rgba(255, 136, 0, 0.925);
+   }
+}
+.icon{
+   font-size: 25px;
+}
+.img{
+   margin-bottom: 20px;
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.spin{
+   font-size: 20px;
+   animation: spin 1s linear infinite;
+}

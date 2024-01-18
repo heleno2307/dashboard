@@ -1,0 +1,78 @@
+.header{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #fff;
+   padding: 10px;
+   border-radius: 10px;
+}
+.container{
+   display: flex;
+   flex-direction: column;
+}
+.title{
+   text-align: center;
+   margin-bottom: 30px;
+}
+.titles{
+   width: 14.28%;
+   text-align: center;
+   font-weight: 600;
+}
+.list{
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   overflow: auto;
+   height: 450px;
+   margin-top: 20px;
+   gap: 15px;
+   padding: 5px;
+}
+.item{
+   display: flex;
+   background-color: rgb(255, 255, 255);
+   padding: 10px;
+   border-radius: 10px;
+   align-items: center;
+}
+.itens{
+   width: 14.28%;
+   text-align: center;
+}
+.list::-webkit-scrollbar {
+   width: 5px; /* Largura da barra de rolagem */
+
+}
+.list::-webkit-scrollbar-thumb {
+   background-color: #8888888f; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+ 
+/* Estilo para Internet Explorer */
+.list{
+   scrollbar-width: thin; /* Largura da barra de rolagem */
+}
+ 
+.list::-ms-scrollbar-thumb {
+   background-color: #888; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon_spin{
+   font-size: 45px;
+   color: #00000091;
+   animation: spin 1s linear infinite;
+}
+
+.load{
+   width: 100%;
+   min-height: 100%;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}

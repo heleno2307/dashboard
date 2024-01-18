@@ -1,0 +1,191 @@
+.main_order{
+   width: 100%;
+   height: 100%;
+   min-height: 450px;
+   background-color: #E6E6E6;
+   border-radius: 10px;
+   box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.212);
+   display: flex;
+   flex-direction: column;
+   padding: 20px 5px;
+   gap: 20px;
+
+}
+.title{
+   text-align: center;
+   font-size: 21px;
+}
+.orders{
+   width: 100%;
+   height: 100%;
+   padding: 0px 20px;
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   overflow: auto;
+}
+.main_title{
+   padding: 0px 20px;
+}
+.orders_list{
+   background-color: #ffff;
+   width: 100%;
+   list-style: none;
+   border-radius: 5px;
+   padding: 10px 5px;
+   display: flex;
+   position: relative;
+   align-items: center;
+   cursor: pointer;
+   transition: all 0.5s;
+   &:hover{
+      background-color: #b8b8b8;
+   }
+   
+   &::before{
+      content: '';
+      top: 0;
+      left: 0;
+      border-radius:  10px 0px 0px 10px;
+      width: 6px;
+      position: absolute;
+
+      height: 100%;
+     
+   }
+   p{
+      width: 12.5%;
+      text-align: center;
+      font-size: 15px;
+   }
+}
+.orders::-webkit-scrollbar {
+   width: 5px; /* Largura da barra de rolagem */
+
+}
+.orders::-webkit-scrollbar-thumb {
+   background-color: #8888888f; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+ 
+/* Estilo para Internet Explorer */
+.orders {
+   scrollbar-width: thin; /* Largura da barra de rolagem */
+}
+ 
+.orders::-ms-scrollbar-thumb {
+   background-color: #888; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+.header{
+   display: flex;
+   background-color: #ffff;
+   padding: 10px;
+   border-radius: 5px;
+   margin: 0px 20px 0px 20px;
+   
+   p{
+      width: 12.5%;
+      font-weight: 600;
+      text-align: center;
+   }
+}
+.green{
+   color: green;
+}
+.orange{
+   color: #FF5722;
+}
+.yellow{
+   color: #FFC107;
+}
+
+.new_order{
+   &::before{
+      background-color: green;
+   }
+}
+.confirm_order{
+   &::before{
+      background-color: #FF5722;
+   }
+}
+.yellow_order{
+   &::before{
+      background-color: #FFC107;
+   }
+}
+.alter_order{
+   &::before{
+      background-color: #0717ff;
+   }
+}
+.date_order{
+   width: 12.5%;
+   display: flex;
+   flex-direction: column;
+   p{
+      text-align: center;
+      width: 100%;
+   }
+   
+}
+.main_status{
+   display: flex;
+   width: 100%;
+   align-items: center;
+   justify-content: space-around;
+}
+.order_status{
+   display: flex;
+   gap: 10px;
+   align-items: center;
+   justify-content: center;
+   margin-top: 20px;
+   margin-bottom: 10px;
+}
+.order_date{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 50px;
+}
+.input_date_order{
+
+   outline: none;
+   border: none;
+   padding: 15px;
+   width: 200px;
+   border-radius: 10px;
+   cursor: pointer;
+   transition: all 0.3s;
+   &:hover{
+      background-color: #acacac;
+   
+   }
+   &:focus{
+      outline: auto;
+   }
+}
+
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon_spin{
+   font-size: 45px;
+   color: #00000091;
+   animation: spin 1s linear infinite;
+   margin: auto auto;
+}
+.sentinela{
+   list-style: none;
+   width: 100%;
+   min-height: 50px;
+   background-color: red;
+}
+@media(max-width:1100px){
+   .main_order{
+      width: 100%;
+   }
+}

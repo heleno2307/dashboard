@@ -1,0 +1,45 @@
+.conteiner{
+   position: relative;
+   top: 77%;
+   transform: translateY(-50%);
+   height: 50px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-left: 40px;
+}
+
+.conteiner .toggle{
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 70px;
+   height: 30px;
+   background-color: #444;
+   border-radius: 30px;
+}
+
+
+.conteiner .toggle .toggleB{
+   position: absolute;
+   top: 5px;
+   left: 5px;
+   height: 20px;
+   width: 20px;
+   background-color: white;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: 0.3s;
+}
+.conteiner .text{
+   position: absolute;
+   top: 50%;
+   transform: translateY(-95%);
+   left: 80px;
+}
+.conteiner .toggle.active{
+   background-color: cornflowerblue;
+}
+.conteiner .toggle.active .toggleB{
+   left: 45px;
+}

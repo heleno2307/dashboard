@@ -1,0 +1,71 @@
+.main{
+   display: flex;
+   flex-direction: column;
+}
+.div_title{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.div_value{
+   display: flex;
+   flex-direction: column;
+   gap: 5px;
+   padding: 10px;
+}
+.title{
+   font-size: 18px;
+   text-align: center;
+   padding: 10px;
+   background-color: #fff;
+   border-radius: 10px;
+   width: fit-content;
+}
+.title_value{
+   padding: 0px 10px;
+   font-weight: 600;
+}
+.value{
+   span{
+      font-weight: 600;
+      margin-right: 10px;
+   }
+   padding: 10px;
+   background-color: #fff;
+   border-radius: 10px;
+ 
+}
+.variacao_div{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin-top: 10px;
+}
+.title_variacao{
+   font-weight: 500;
+   font-size: 20px;
+}
+
+.value_variacao{
+   margin-top: 10px;
+   font-size: 25px;
+   font-weight: 600;
+}
+
+.positive{
+   color: #3c8c2f;
+}
+.negative{
+   color: #b90a0a;
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon_spin{
+   font-size: 45px;
+   color: #00000091;
+   animation: spin 1s linear infinite;
+   margin: auto auto;
+}

@@ -1,0 +1,22 @@
+.main_list{
+   margin-top: 30px;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   max-height: 550px;
+}
+.main_list_order{
+   margin-top: 30px;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   max-height: 600px;
+}
+@media(max-width:1100px){
+   .main_list{
+      max-height: 100%;
+      flex-direction: column;
+   }
+}

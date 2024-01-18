@@ -1,0 +1,78 @@
+.main_info{
+   display: flex;
+   justify-content: space-around;
+   padding: 10px 0px;
+   margin-top: 10px;
+   flex-wrap: wrap;
+   gap: 10px;
+   
+}
+.infos{
+   display: flex;
+   gap: 40px;
+   background-color: rgb(230, 230, 230);
+   border-radius: 15px;
+   padding: 20px 40px;
+   min-width: 200px;
+   max-width: 300px;
+   width: 100%;
+   align-items: center;
+   justify-content: space-between;
+   box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.192);
+}
+.info{
+   display: flex;
+   flex-direction: column;
+   gap: 5px;
+}
+.title{
+   font-size: 14px;
+
+}
+.value{
+   font-size: 19px;
+   font-weight: 600;
+}
+.divIcon{
+   display: flex;
+   align-items: center;
+}
+.dayInfo_icon{
+   font-size: 45px;
+   color: aliceblue;
+   
+   padding: 8px;
+   border-radius: 100%;
+}
+.dayInfo_iconArrow{
+   font-size: 10px;
+   color: rgba(0, 0, 0, 0.452);
+}
+.sale{
+   background-color: #66BB6A;
+}
+.devolution{
+   background-color: #ef5350;
+}
+.margin_sale{
+   background-color: #42A5F5;
+}
+.devolutionDiv{
+   cursor: pointer;
+   position: relative;
+   transition: 0.5s all;
+   &:hover{
+      background-color: #adadad;
+   }
+
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon_spin{
+   font-size: 25px;
+   color: #00000091;
+   animation: spin 1s linear infinite;
+   margin: auto auto;
+}

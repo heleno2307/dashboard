@@ -1,0 +1,112 @@
+.main{
+   width: 50%;
+   height: 100%;
+   min-height: 450px;
+   background-color: #E6E6E6;
+   border-radius: 10px;
+   box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.212);
+   display: flex;
+   padding: 20px;
+   flex-direction: column;
+   gap: 20px;
+}
+.div_title{
+   display: flex;
+   width: 100%;
+   align-items: center;
+   justify-content: center;
+}
+
+.header{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #fff;
+   border-radius: 10px;
+   padding: 10px;
+   p{
+      width: 25%;
+      text-align: center;
+      font-weight: 600;
+   }
+   
+}
+.list{
+   margin-top: 20px;
+   width: 100%;
+   height: 330px;
+   overflow: auto;
+   display: flex;
+   flex-direction: column;
+   padding: 5px;
+   gap: 10px;
+  
+}
+.list::-webkit-scrollbar {
+   width: 5px; /* Largura da barra de rolagem */
+
+}
+.list::-webkit-scrollbar-thumb {
+   background-color: #8888888f; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+ 
+/* Estilo para Internet Explorer */
+.list {
+   scrollbar-width: thin; /* Largura da barra de rolagem */
+}
+ 
+.list::-ms-scrollbar-thumb {
+   background-color: #888; /* Cor do polegar da barra de rolagem */
+   border-radius: 5px; /* Raio da borda do polegar da barra de rolagem */
+}
+
+.item{
+   display: flex;
+   padding: 5px;
+   background-color: #fff;
+   border-radius: 10px;
+   align-items: center;
+   justify-content: center;
+   transition: all 0.5s;
+
+   &:hover{
+      background-color: #c9c9c9;
+      cursor: pointer;
+   }
+   p{
+      width: 25%;
+      text-align: center;
+   }
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon_spin{
+   font-size: 45px;
+   color: #00000091;
+   animation: spin 1s linear infinite;
+   margin: auto auto;
+}
+.inputDiv{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.input{
+   outline: none;
+   border: none;
+   padding: 15px;
+   width: 200px;
+   border-radius: 10px;
+   cursor: pointer;
+   transition: all 0.3s;
+   &:hover{
+      background-color: #acacac;
+   
+   }
+   &:focus{
+      outline: auto;
+   }
+}
