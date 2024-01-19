@@ -9,12 +9,11 @@ import { getDate } from '@/utilities/getDate';
 import { newDate } from '@/utilities/newDate';
 import { replaceDate } from '@/utilities/replaceDate';
 import { useDate } from '@/hook/useDate';
-import { useFetch } from '@/hook/useFetch';
 import { useInitialContext } from '@/context/initialInfoContext';
-import getInitil from '@/routes/get.initial';
 import Toast from '../Toast/Toast';
 import { useToast } from '@/context/toastContext';
 import { useAllContext } from '@/context/allContext';
+import getInitial from '@/routes/get.initial';
 
 
 type MonthlySale = {
@@ -84,17 +83,29 @@ const LastSales = ()=>{
       setInfos(null);
       
       try {
-         const data = await getInitil(user.code,dateini,dateFim,all);
+         const data = await getInitial(user.code,dateini,dateFim,all);
          if(data.SD2){
             setInfos(data);
-         }else if(data.erro){
-            setInfos(saveData);
-            showToast('info','Erro 03, contactar o administrador',4000)
          }
-        
-
+      
       } catch (error) {
          console.log(error);
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+       
+         } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setInfos(saveData);
+         } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setInfos(saveData);
+         } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setInfos(saveData);
+         } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setInfos(saveData);
+         }
       }  
    }
    

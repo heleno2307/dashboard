@@ -38,14 +38,28 @@ const Client = ({client}:Props)=>{
          if(data.VARIACAO){
             setVariacao(data.VARIACAO);
             alterColor(data);
-         }else{
-            showToast('info','Erro 06, contactar o administrador',4000);
-            setVariacao(0);
          }
         
          
       } catch (error) {
+         //tratar error
          console.log(error)
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+            setVariacao(0);
+          } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setVariacao(0);
+          } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setVariacao(0);
+          } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setVariacao(0);
+          } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setVariacao(0);
+          }
       }
    },[user,all]);
 

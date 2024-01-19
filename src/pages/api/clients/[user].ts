@@ -15,7 +15,7 @@ export default async function  handler(
   res: NextApiResponse
 ) {
   const admin:boolean = req.body.admin;
-  if(admin == null || admin == undefined) return res.status(401).json({erro:'errro'});
+ 
 
   const { user } = req.query;
   const controller = new Controller(user);
@@ -25,6 +25,10 @@ export default async function  handler(
   const data = await controller.getClients(admin,page,limit);
   if(data == 402){
     return res.status(402).json({erro: 'erro ao consultar no banco de dados'})
+  }else if(data == 401){
+    return  res.status(401).json({error:'Error, algum parâmetro em branco'});
+  }else{
+    return res.status(200).json(data);
   }
-  return res.status(200).json(data);
+  
 }

@@ -29,10 +29,12 @@ export default async function  handler(
   const data = await controller.getSalesFilter(dateIni,dateFim,admin,filter,page,limit);
 
   if(data == 402){
-    return res.status(402).json({erro: 'erro ao consultar no banco de dados'})
+    return res.status(402).json({error: 'Erro ao consultar no banco de dados'})
   }else  if(data == 401){
-   return res.status(401).json({erro: 'filtro não informado'})
- }
-  console.log(data)
-  return res.status(200).json(data);
+    return res.status(401).json({error: 'Error, algum parâmetro em branco'})
+ }else{
+    return res.status(200).json(data);
+  }
+  
+  
 }

@@ -3,7 +3,6 @@ import { createContext, useContext, useState } from "react";
 import {ReactNode} from 'react';
 import { useFetch } from "@/hook/useFetch";
 import { useUserContext } from "./userContext";
-import getInitil from "@/routes/get.initial";
 import { getInitialDate } from "@/utilities/getInitialDate";
 import { getDate } from "@/utilities/getDate";
 import { ImSpinner8 } from "react-icons/im";
@@ -11,6 +10,7 @@ import style from './initial.module.scss'
 import Toast from "@/components/Toast/Toast";
 import { useToast } from "./toastContext";
 import { useAllContext } from "./allContext";
+import getInitial from "@/routes/get.initial";
 
 type Props = {
    children:ReactNode
@@ -54,17 +54,24 @@ const InitialProvider = ({ children }: Props) => {
    useFetch(async () => {
       if (!user) return;
       try {
-         const data = await getInitil(user.code, getInitialDate(), getDate(),all);
+         const data = await getInitial(user.code, getInitialDate(), getDate(),all);
          if(data.SD2){
             setInitial(data);
-         }else if( data && data.erro){
-            console.log('erro')
-            showToast('info','Erro 02, contactar administrador',4000)
          }
 
-         
       } catch (error) {
          console.log(error)
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+          } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+          } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+          } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+          } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+         }
       }
    }, [user, setInitial,all]);
 

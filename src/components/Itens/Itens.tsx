@@ -34,12 +34,27 @@ const Itens =({order}:Prop)=>{
          const data = await getItens(user.code, order.filial, order.order);
          if(Array.isArray(data)){
             setItens(data);
-         }else if(data && data.erro){
-            showToast('info','Erro 07, contactar o administrador',4000);
          }
          
       } catch (error) {
+         //tratar error
          console.log(error);
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+            setItens([])
+          } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setItens([])
+          } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setItens([])
+          } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setItens([])
+          } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setItens([])
+          }
       }
      
    },[user]);

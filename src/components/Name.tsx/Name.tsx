@@ -1,8 +1,9 @@
+import { useToast } from "@/context/toastContext";
 import { useUserContext } from "@/context/userContext";
 import { useFetch } from "@/hook/useFetch";
 import getName from "@/routes/getName";
 import capitalizeNames from "@/utilities/capitalizeNames";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 type Data = [
    {
@@ -14,6 +15,27 @@ type Data = [
 const Name = ()=>{
    const { user } = useUserContext();
    const [name, setName] = useState('');
+   const {showToast} = useToast()
+
+   const hendlerError = (error: unknown) => {
+      if (error === 404) {
+        showToast('erro', 'Error 02, contactar administrador', 4000);
+        setName('Desconhecido');
+      } else if (error === 500) {
+        showToast('erro', 'Error 03, contactar administrador', 4000);
+        setName('Desconhecido');
+      } else if (error === 401) {
+        showToast('erro', 'Error 04, contactar administrador', 4000);
+        setName('Desconhecido');
+      } else if (error === 402) {
+        showToast('erro', 'Error 01, contactar administrador', 4000);
+        setName('Desconhecido');
+      } else {
+        showToast('erro', 'Error 05, contactar administrador', 4000);
+        setName('Desconhecido');
+      }
+   };
+
 
    //REALIZA UMA REQUISICAO PARA PEGAR NOME DO USUARIO
    useFetch(async()=>{
@@ -22,7 +44,7 @@ const Name = ()=>{
             const data:Data = await getName(user.code);
             checkData(data);
          } catch (error) {
-            console.log(error)
+            hendlerError(error)
          }
          
       }

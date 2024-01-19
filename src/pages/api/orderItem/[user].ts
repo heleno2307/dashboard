@@ -19,12 +19,13 @@ export default async function  handler(
   const order = req.body.order;
   
 
-  if(!filial || !order) return res.status(401);
-
   const controller = new Controller(user)
   const data = await controller.getOrderItem(filial,order);
+
   if(data == 402){
-    return res.status(402).json({erro: 'erro ao consultar no banco de dados'})
+    return res.status(402).json({error: 'Error ao consultar no banco de dados'})
+  }else if (data == 401){
+     return res.status(401).json({error: 'Error, algum parâmetro passado em branco'})
   }
   return res.status(200).json(data);
 }

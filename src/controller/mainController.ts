@@ -77,14 +77,21 @@ export default class Controller  {
 
    //RETORNA O USUARIO
    async getUser(){
-      if(!this.loginUser.trim()) return 402;  
-      const data:{}[] = await model.getName(this.loginUser);
-      return data;
+      if(!this.loginUser.trim()) return 401; 
+
+      try {
+         const data = await model.getName(this.loginUser);
+         return data;
+      } catch (error) {
+         return 402;
+      }
+   
    }
 
    //RETORNA UMA LISTA DE PEDIDOS
    async getSales(dateIni:string,dateFim:string,admin:boolean =false,page:number=1,limitUser:number=15){
-      if(!dateIni.trim() || !dateFim.trim()) return;
+      if(!dateIni.trim() || !dateFim.trim() || admin == null || admin == undefined) return 401;
+      
       if(admin){
          try {
             const registerData = await model.getCountSales('','999999',dateIni,dateFim);
@@ -152,7 +159,7 @@ export default class Controller  {
    }
 
    async getSalesFilter (dateIni:string,dateFim:string,admin:boolean =false,filter:string,page:number=1,limitUser:number=15){
-      if(!filter.trim())return 401
+      if(!filter.trim() ||  admin == null || admin == undefined) return 401;
 
       if(admin){
          if(filter.trim().toUpperCase() == 'NF'){
@@ -350,8 +357,8 @@ export default class Controller  {
    }
 
    async getSalesFilterInput(dateIni:string,dateFim:string,admin:boolean =false,filter:string,page:number=1,limitUser:number=15){
-      if(!dateIni.trim() || !dateFim.trim()) return;
-      if(!filter.trim())return 401
+      if(!dateIni || !dateFim || admin == null || admin == undefined || !filter.trim())return 401
+   
       if(admin){
          try {
             const registerData = await model.getCountSalesInput('','999999',dateIni,dateFim,filter.trim().toUpperCase());
@@ -419,7 +426,7 @@ export default class Controller  {
 
    //RETORNA DEVOLUÇÃO DETALHADA
    async getCurrentDevolution(date:string,admin:boolean){
-      if(!date) return;
+      if(!date || admin==null || admin == undefined) return 401
      
       try {
       
@@ -447,6 +454,7 @@ export default class Controller  {
 
    //RETORNA UMA LISTA DE CLIENTES E SEUS TOTAIS DE COMPRA
    async getClients(admin:boolean=false,page:number =1,limitUser:number=15){
+         if(admin == null || admin == undefined) return 401;
          const date180 = subtrairDias(180);
 
          if(admin){
@@ -521,7 +529,8 @@ export default class Controller  {
    }
 
    //RETORNA UMA LISTA DE CLIENTES E SEUS TOTAIS DE COMPRA
-   async getClientsFilter(admin:boolean=false,page:number =1,limitUser:number=15,filter:string){
+   async getClientsFilter(admin:boolean,page:number =1,limitUser:number=15,filter:string){
+      if(admin == null || admin == undefined) return 401;
       const date180 = subtrairDias(180);
 
       if(admin){
@@ -593,11 +602,12 @@ export default class Controller  {
        
       }  
       
-}
+   }
 
    //RETORNA CALCULO DE VARIAÇÃO DE COMPRA DE UM CLIENTE
    async getClient(codClient:string,loja:string,admin:boolean){
-      if(!codClient || !loja) return;
+      if(admin == null || admin == undefined || !codClient || !loja) return 401
+  
       try {
          const userCod = await this.getUserCod();
          const days = subtrairDias(179);
@@ -665,7 +675,7 @@ export default class Controller  {
 
    //RETORNA TODOS DADOS INICIAIS PARA O PROGRAMA
    async getInitial(dateIni:string,dateFim:string,admin:boolean){
-      if(!dateIni || !dateFim)return
+      if(!dateIni || !dateFim || admin == null || admin == undefined) return 401;
 
       let devolutions:SD1[];
       let sales:SD2[];
@@ -745,7 +755,7 @@ export default class Controller  {
    }
 
    async getOrderItem(filial:string,order:string){
-      if(!filial || !order)return;
+      if(!filial || !order) return 401
       try {
          const data:SC6[] = await model.getSC6(order,filial);
          return data;

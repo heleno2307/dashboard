@@ -37,6 +37,30 @@ const Clients = ()=>{
 
    const targetRef = useRef<HTMLLIElement>(null);
 
+   const hendlerError = useCallback((error: unknown) => {
+      if (error === 404) {
+        showToast('erro', 'Error 02, contactar administrador', 4000);
+        setClients([]);
+        setClientsAux([])
+      } else if (error === 500) {
+        showToast('erro', 'Error 03, contactar administrador', 4000);
+        setClients([]);
+        setClientsAux([])
+      } else if (error === 401) {
+        showToast('erro', 'Error 04, contactar administrador', 4000);
+        setClients([]);
+        setClientsAux([])
+      } else if (error === 402) {
+        showToast('erro', 'Error 01, contactar administrador', 4000);
+        setClients([]);
+        setClientsAux([])
+      } else {
+        showToast('erro', 'Error 05, contactar administrador', 4000);
+        setClients([]);
+        setClientsAux([])
+      }
+   }, [setClients, setClientsAux,showToast]);
+   
    //FAZ UMA REQUISICAO PARA OBTER UMA LISTA DE CLIENTES
    useFetch(async()=>{
       if(!user) return
@@ -52,13 +76,12 @@ const Clients = ()=>{
            setLastPage((current)=> !data.last_Page?1:data.last_Page);
            setPage((current) => !data.next_page?0:data.next_page);
            
-         } else if (data && data.erro) {
-           // Se houver um erro, exiba uma mensagem de toast
-           showToast('info', 'Erro 01, Contactar  o administrador',4000);
-         }
+         } 
      
        } catch (error) {
+         //tratar erro
          console.error('Erro ao obter clientes:', error);
+         hendlerError(error)
        }
       
    },[user,all]);
@@ -68,19 +91,21 @@ const Clients = ()=>{
       try {
          const data = await getClients(user,all,page);
          if (Array.isArray(data.SA1)) {
+
             // Se for um array (clientes), atualize o estado de clientes
             setClients((current:any)=> [...current,...data.SA1]);
             setClientsAux((current:any)=> [...current,...data.SA1]);
             setLastPage((current)=> data.last_Page);
             setPage((current) => data.next_page);
-          } else if (data && data.erro) {
-            // Se houver um erro, exiba uma mensagem de toast
-            showToast('info', 'Erro 01, Contactar  o administrador',4000);
+
          }
+
       } catch (error) {
          console.error('Erro ao obter clientes:', error);
+         hendlerError(error)
       }
-   },[page,all,showToast]);
+
+   },[page,all,hendlerError]);
    
    //efeito que manitora se elemento é visivél e chama api se necessário
    useEffect(() => {
@@ -96,8 +121,6 @@ const Clients = ()=>{
                if (entry.isIntersecting) {
                   if (lastPage > page && user) { 
                      callBackFetch(user.code); 
-                  }else{
-                     console.log('caiu aqui')
                   }
                }
             });
@@ -137,33 +160,28 @@ const Clients = ()=>{
               setLastPage((current)=>!data.last_Page?0:data.last_Page);
               setPage((current) => !data.next_page?0:data.next_page);
               return;
-   
-            }else if (data && data.erro) {
-               // Se houver um erro, exiba uma mensagem de toast
-               showToast('info', 'Erro 01, Contactar  o administrador',4000);
-               return
             }
          } catch (error) {
+            //tratar error
             console.log(`Erro ao buscar clientes: ${error}`)
+            hendlerError(error);
          }
       }else{
-         const data = await getClients(user.code,all);
-
          try {
-            
+            const data = await getClients(user.code,all);
+
             if(Array.isArray(data.SA1)){
                setClients(data.SA1);
                setLastPage((current)=> !data.last_Page?0:data.last_Page);
                setPage((current) =>  !data.next_page?0:data.next_page);
                return;
    
-            }else if (data && data.erro) {
-               // Se houver um erro, exiba uma mensagem de toast
-               showToast('info', 'Erro 01, Contactar  o administrador',4000);
-               return
             }
+            
          } catch (error) {
+            //tratar error
             console.log(`Erro ao buscar clientes: ${error}`)
+            hendlerError(error)
          }
       }
    }

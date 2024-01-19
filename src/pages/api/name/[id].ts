@@ -15,8 +15,15 @@ export default async function  handler(
   res: NextApiResponse
 ) {
   const { id } = req.query;
-
   const controller = new Controller(id)
   const data = await controller.getUser();
-  return res.status(200).json(data);
+
+  if(data == 402){
+    return res.status(402).json({error: 'falha ao consultar o banco de dados'});
+  }else if(data == 401){
+    return res.status(401).json({error: 'O parâmetro enviado está em branco'});
+  }else{
+    return res.status(200).json(data);
+  }
+  
 }

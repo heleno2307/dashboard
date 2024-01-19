@@ -41,6 +41,7 @@ type Order = {
    order:string|null
 }
 
+
 const Orders = ()=>{
    const { user } = useUserContext();
    const { showToast } = useToast()
@@ -62,7 +63,29 @@ const Orders = ()=>{
    const [filterInput,setFilterInput] = useState<string>('')
    
 
-   
+   const hendlerError = useCallback((error: unknown) => {
+      if (error === 404) {
+        showToast('erro', 'Error 02, contactar administrador', 4000);
+        setSales([]);
+        setSalesFilter([]);
+      } else if (error === 500) {
+        showToast('erro', 'Error 03, contactar administrador', 4000);
+        setSales([]);
+        setSalesFilter([]);
+      } else if (error === 401) {
+        showToast('erro', 'Error 04, contactar administrador', 4000);
+        setSales([]);
+        setSalesFilter([]);
+      } else if (error === 402) {
+        showToast('erro', 'Error 01, contactar administrador', 4000);
+        setSales([]);
+        setSalesFilter([]);
+      } else {
+        showToast('erro', 'Error 05, contactar administrador', 4000);
+        setSales([]);
+        setSalesFilter([]);
+      }
+   }, [setSales, setSalesFilter,showToast]);
 
    useEffect(() => {
       setSalesFilter(sales);
@@ -73,25 +96,28 @@ const Orders = ()=>{
    useFetch(async () => {
       if (!user) return;
       try {
-        const dataFetch = await getCurrentSales(
+
+         const dataFetch = await getCurrentSales(
             user.code,
             replaceDate(getInitialDateOrder()),
             replaceDate(getDate()),
             all
-        );
-  
-        if (Array.isArray(dataFetch.SC5)) {
+         );
+      
+         if (Array.isArray(dataFetch.SC5)) {
             setSales(dataFetch.SC5);
             setSalesFilter(dataFetch.SC5);
-            setPage(dataFetch.next_page)
-            setLastPage(()=> dataFetch.last_Page)
-        } else if (dataFetch && dataFetch.erro) {
-            showToast('info',dataFetch.erro,4000);
-        }
+            setPage(dataFetch.next_page);
+            setLastPage(() => dataFetch.last_Page);
+      
+         } 
+
       } catch (error) {
-         console.log(error);
+         // Tratar erro
+        hendlerError(error);
       }
    }, [user, all]);
+    
    
    const callbackFetch = useCallback(async(
       user:string,
@@ -100,28 +126,29 @@ const Orders = ()=>{
       all:boolean,
       page:number
       )=>{
-         if(filter == 'TD'){
-            const data = await getCurrentSales(user,dateIni,dateFim,all,page);
-            if(Array.isArray(data?.SC5)){
-               setSales((current:any)=> [...current,...data.SC5]);
-               setPage((current)=> current + 1);      
-               setLastPage(data.last_Page)
-            }else if(data.erro && data){
-               showToast('info',data.erro,4000);
-            }
-         }else{
-            const data = await getCurrentSalesFilter(user,dateIni,dateFim,filter,all,page);
-            if(Array.isArray(data?.SC5)){
-               setSales((current:any)=> [...current,...data.SC5]);
-               setPage((current)=> current + 1);      
-               setLastPage(data.last_Page)
-               console.log(data)
-            }else{
+         try {
+            if(filter == 'TD'){
+               const data = await getCurrentSales(user,dateIni,dateFim,all,page);
+               if(Array.isArray(data?.SC5)){
+                  setSales((current:any)=> [...current,...data.SC5]);
+                  setPage((current)=> current + 1);      
+                  setLastPage(data.last_Page)
+               }
    
+            }else{
+               const data = await getCurrentSalesFilter(user,dateIni,dateFim,filter,all,page);
+               if(Array.isArray(data?.SC5)){
+                  setSales((current:any)=> [...current,...data.SC5]);
+                  setPage((current)=> current + 1);      
+                  setLastPage(data.last_Page)
+               }
             }
+         } catch (error) {
+            //tratar erro
+            hendlerError(error);
          }
         
-   },[filter,showToast]);
+   },[filter,hendlerError]);
 
    useEffect(() => {
       if (typeof window !== 'undefined' && user) {
@@ -178,9 +205,7 @@ const Orders = ()=>{
       if(!user || !dateFimRef.current?.value || !dateIniRef.current?.value) return
       const dateini:string = replaceDate(dateIniRef.current.value);
       const dateFim:string = replaceDate(dateFimRef.current.value);
-      const saveData = sales;
-      setSales(null);
-      setSalesFilter(null);
+
       if(filter == "TD"){
          try {
             const data = await getCurrentSales(user.code,dateini,dateFim,all);
@@ -190,13 +215,11 @@ const Orders = ()=>{
                setSalesFilter(data.SC5);
                setPage(()=> !data.next_page?1:data.next_page)
                setLastPage(()=> !data.last_Page?0:data.last_Page)
-            }else if(data && data.erro){
-               showToast('info',data.erro,4000);
-               setSales(saveData);
-               setSalesFilter(saveData);
-            }
+
+            } 
          } catch (error) {
-            console.log(error);
+            //tratar erro
+            hendlerError(error);
          }
       }else{
          try {
@@ -207,13 +230,10 @@ const Orders = ()=>{
                setSalesFilter(data.SC5);
                setPage(()=> !data.next_page?1:data.next_page)
                setLastPage(()=> !data.last_Page?0:data.last_Page)
-            }else if(data && data.erro){
-               showToast('info',data.erro,4000);
-               setSales(saveData);
-               setSalesFilter(saveData);
-            }
+            }  
          } catch (error) {
-            console.log(error);
+            //tratar error
+            hendlerError(error);
          }
       }
     
@@ -227,7 +247,6 @@ const Orders = ()=>{
       }
       const dateini:string = replaceDate(dateIniRef.current.value);
       const dateFim:string = replaceDate(dateFimRef.current.value);
-      const saveData = sales;
       setSales(null);
       setSalesFilter(null);
 
@@ -239,13 +258,11 @@ const Orders = ()=>{
             setSalesFilter(data.SC5);
             setPage(()=> !data.next_page?1:data.next_page)
             setLastPage(()=> !data.last_Page?0:data.last_Page)
-         }else if(data && data.erro){
-            showToast('info',data.erro,4000);
-            setSales(saveData);
-            setSalesFilter(saveData);
-         }
+         } 
       } catch (error) {
+         //tratar error
          console.log(error);
+         hendlerError(error);
       }
    }
        
@@ -254,7 +271,6 @@ const Orders = ()=>{
       
       const dateini:string = replaceDate(dateIniRef.current.value);
       const dateFim:string = replaceDate(dateFimRef.current.value);
-      const saveData = sales;
       setSales(null);
       setSalesFilter(null);
       try {
@@ -263,15 +279,14 @@ const Orders = ()=>{
          if(Array.isArray(data.SC5)){
             setSales(data.SC5);
             setSalesFilter(data.SC5);
-            setPage(data.next_page)
-            setLastPage(()=> data.last_Page)
-         }else if(data && data.erro){
-            showToast('info',data.erro,4000);
-            setSales(saveData);
-            setSalesFilter(saveData);
-         }
+            setPage(data.next_page);
+            setLastPage(()=> data.last_Page);
+            
+         } 
       } catch (error) {
+         //tratar error
          console.log(error);
+         hendlerError(error);
       }
      
       

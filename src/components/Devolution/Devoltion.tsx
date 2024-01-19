@@ -36,11 +36,25 @@ const Devolution = ()=>{
          const data = await getDevolution(user.code, replaceDate(getDate()),all);
          if (Array.isArray(data)) {
             setDevolution(data);
-         } else if (data && data.erro) {
-            showToast('info', 'Erro 05, contactar o administrador', 4000);
          }
       } catch (error) {
-         // Handle the error
+         //tratar error
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+            setDevolution([])
+         } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setDevolution([])
+         } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setDevolution([])
+         } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setDevolution([])
+         } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setDevolution([])
+         }
       }
    }, [user,all]);
    
@@ -60,12 +74,12 @@ const Devolution = ()=>{
             setDevolution(data);
          } else if (data && data.erro) {
             setDevolution(saveData);
-            showToast('info', 'Erro 05, contactar o administrador', 4000);
+            showToast('info', 'Erro 01, contactar o administrador', 4000);
          } else {
             console.log('entrou');
          }
       } catch (error) {
-         // Handle the error
+         //tratar error
       }
    };
    

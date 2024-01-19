@@ -21,14 +21,17 @@ export default async function  handler(
   const limit:number = req.body.limit;
   const page:number = req.body.page
 
-  if(!dateIni || !dateFim || admin == null || admin == undefined) return res.status(401).json({error:'erro'});
+   
 
   const controller = new Controller(user)
   const data = await controller.getSales(dateIni,dateFim,admin,page,limit);
 
   if(data == 402){
-    return res.status(402).json({erro: 'erro ao consultar no banco de dados'})
+    return res.status(402).json({error: 'Erro ao consultar no banco de dados'})
+  }else if(data == 401){
+    return res.status(401).json({error:'Error, algum parâmetro em branco'});
+  }else{
+    return res.status(200).json(data);
   }
-
-  return res.status(200).json(data);
+ 
 }

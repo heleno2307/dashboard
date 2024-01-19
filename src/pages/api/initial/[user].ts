@@ -19,12 +19,15 @@ export default async function  handler(
   const admin:boolean = req.body.admin
   const dateFim =  req.body.dateFim;
 
-  if(!dateIni || !dateFim || admin == null || admin == undefined) return res.status(401);
-
   const controller = new Controller(user)
-  const data = await controller.getInitial(dateIni,dateFim,admin)
+  const data = await controller.getInitial(dateIni,dateFim,admin);
+  
   if(data == 402){
-    return res.status(402).json({erro: 'erro ao consultar no banco de dados'})
+    return res.status(402).json({error: 'erro ao consultar no banco de dados'})
+  }else if(data == 401){
+    return res.status(401).json({error:'Erro, algum parâmetro em branco'});
+  }else{
+    return res.status(200).json(data);
   }
-  return res.status(200).json(data);
+  
 }
