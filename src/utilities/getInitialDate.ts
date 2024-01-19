@@ -2,8 +2,8 @@ export const getInitialDate = () => {
    const today = new Date();
    let lastDayOfPreviousMonth;
 
-   if(new Date().getDate() <= 25){
-      lastDayOfPreviousMonth= new Date(today.getFullYear(), today.getMonth() - 1, 25);
+   if(today.getDate() <= 26){
+      lastDayOfPreviousMonth= new Date(today.getFullYear(), today.getMonth() - 1, 26);
       
    }else{
       lastDayOfPreviousMonth= new Date(today.getFullYear(), today.getMonth(), 26);
