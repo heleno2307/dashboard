@@ -263,19 +263,20 @@ export default class Controller  {
                const userCod =  await this.getUserCod();
                const registerData = await model.getCountSalesNf(userCod,userCod,dateIni,dateFim);
                const register = registerData[0].CONT;
-               console.log(register)
+               
                if(register !== 0){
-                   const limit = limitUser > 15? 15 : limitUser
-                   const lastPage = Math.ceil(register / limit);
-                   const data:Sales[] = await model.getSalesNf(userCod,userCod,dateIni,dateFim,limit,page);
-                   return {
-                      last_Page:lastPage,
-                      page,
-                      next_page: page < lastPage ? page + 1 : false,
-                      qtd_register: register,
-                      qtd_result: data.length,
-                      SC5:data                  
-                   };
+                  const limit = limitUser > 15? 15 : limitUser
+                  const lastPage = Math.ceil(register / limit);
+                  const data:Sales[] = await model.getSalesNf(userCod,userCod,dateIni,dateFim,limit,page);
+
+                  return {
+                     last_Page:lastPage,
+                     page,
+                     next_page: page < lastPage ? page + 1 : false,
+                     qtd_register: register,
+                     qtd_result: data.length,
+                     SC5:data                  
+                  };
                }else{
                   return {
                      last_Page:false,
@@ -294,18 +295,20 @@ export default class Controller  {
                const userCod =  await this.getUserCod();
                const registerData = await model.getCountSalesAdd(userCod,userCod,dateIni,dateFim);
                const register = registerData[0].CONT;
+
                if(register !== 0){
-                   const limit = limitUser > 15? 15 : limitUser
-                   const lastPage = Math.ceil(register / limit);
-                   const data:Sales[] = await model.getSalesAdd(userCod,userCod,dateIni,dateFim,limit,page);
-                   return {
-                      last_Page:lastPage,
-                      page,
-                      next_page: page < lastPage ? page + 1 : false,
-                      qtd_register: register,
-                      qtd_result: data.length,
-                      SC5:data                  
-                   };
+                  const limit = limitUser > 15? 15 : limitUser
+                  const lastPage = Math.ceil(register / limit);
+                  const data:Sales[] = await model.getSalesAdd(userCod,userCod,dateIni,dateFim,limit,page);
+
+                  return {
+                     last_Page:lastPage,
+                     page,
+                     next_page: page < lastPage ? page + 1 : false,
+                     qtd_register: register,
+                     qtd_result: data.length,
+                     SC5:data                  
+                  };
                }else{
                   return {
                      last_Page:false,
@@ -318,18 +321,19 @@ export default class Controller  {
                }
              } catch (error) {
                 return 402;
-             }
+            }
          }else{
             try {
               const userCod =  await this.getUserCod();
               const registerData = await model.getCountSalesFilter(userCod,userCod,dateIni,dateFim,filter.trim().toUpperCase());
               const register = registerData[0].CONT;
-              console.log(register)
+
+
               if(register !== 0){
                   const limit = limitUser > 15? 15 : limitUser
                   const lastPage = Math.ceil(register / limit);
                   const data:Sales[] = await model.getSalesFilter(userCod,userCod,dateIni,dateFim,limit,page,filter.trim().toUpperCase());
-                  console.log(data)
+
                   return {
                      last_Page:lastPage,
                      page,

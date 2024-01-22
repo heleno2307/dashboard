@@ -64,7 +64,7 @@ export const OrderList:FC<Props> = ({salesFilter,setOrder,setPopup,targetRef})=>
                      <p>{el.C5_FILIAL}</p>
                      <p>{el.C5_NUM} / {el.C5_ZVERSAO}</p>
                      <p>{el.C5_NOMECLI}</p>
-                     <p>{el.C6_VALOR}</p>
+                     <p>{el.C6_VALOR.toFixed(2)}</p>
                      <p>{el.C5_TRANSP}</p>
                      {el.C5_ZSTSOSS == 'SPD'?<p>Confirmado</p>:null}
                      {el.C5_ZSTSOSS == 'SPN'?<p>Pendente de Confirmação</p>:null}

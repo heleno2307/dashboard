@@ -24,7 +24,6 @@ export default async function  handler(
 
 
   if(!dateIni || !dateFim || admin == null || admin == undefined) return res.status(401).json({error:'erro'});
-  console.log({dateIni,dateFim,filter,page,limit,admin})
   const controller = new Controller(user)
   const data = await controller.getSalesFilter(dateIni,dateFim,admin,filter,page,limit);
 
