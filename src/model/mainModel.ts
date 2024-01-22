@@ -858,6 +858,9 @@ export default class Model {
          .input('DATE1',VarChar,dateFim)
          .query(`
             USE TMPRD;
+            IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
+            
+            SELECT A1_COD, A1_LOJA INTO #FILIAIS FROM SA1010 (NOLOCK) WHERE SA1010.D_E_L_E_T_ = '' AND A1_FILTRF <> '';
 
             SELECT
                SUM(D2_TOTAL) D2_TOTAL,
@@ -878,6 +881,7 @@ export default class Model {
                AND SD2010.D_E_L_E_T_= ''
                AND F2_VEND1 BETWEEN @SELLER AND @SELLER1
                AND F2_EMISSAO BETWEEN @DATE AND @DATE1
+               AND F2_CLIENTE + F2_LOJA NOT IN (SELECT #FILIAIS.A1_COD + A1_LOJA FROM #FILIAIS)
             GROUP BY
                D2_EMISSAO
             ORDER BY
