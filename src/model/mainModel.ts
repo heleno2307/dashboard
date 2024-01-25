@@ -468,6 +468,9 @@ export default class Model {
          .input('ENTRADA',VarChar,date)
          .query(`
             USE TMPRD;
+            IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
+            
+            SELECT A1_COD, A1_LOJA INTO #FILIAIS FROM SA1010 (NOLOCK) WHERE SA1010.D_E_L_E_T_ = '' AND A1_FILTRF <> '';
 
             SELECT
                	D1_FILIAL ,
@@ -509,6 +512,7 @@ export default class Model {
                AND C5_VEND1 BETWEEN @VENDEDOR AND @VENDEDOR1
                AND SA1010.D_E_L_E_T_ = ''
                AND SA3010.D_E_L_E_T_ = ''
+               AND C5_CLIENTE + C5_LOJACLI NOT IN (SELECT #FILIAIS.A1_COD + A1_LOJA FROM #FILIAIS)
             
             GROUP BY
                D1_FILIAL,
