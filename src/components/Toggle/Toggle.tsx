@@ -5,11 +5,12 @@ import { useAllContext } from '@/context/allContext';
 interface Prop {
    handleRefresh: ()=> void,
    setToggle: Dispatch<SetStateAction<boolean>>,
-   toggle:boolean
+   toggle:boolean,
+   text: string,
+   setText: Dispatch<SetStateAction<string>>,
 }
-const Toggle:FC<Prop> = ({handleRefresh,setToggle,toggle}) =>{
+const Toggle:FC<Prop> = ({handleRefresh,setToggle,toggle,setText,text}) =>{
    
-   const [text,setText] = useState('User');
    const {alterAll} = useAllContext();
 
    const AnimatedToggle = ()=>{

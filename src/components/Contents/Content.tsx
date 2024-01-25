@@ -13,6 +13,7 @@ const Content = () => {
   const [refresh, setRefresh] = useState(true);
   const {all} = useAllContext();
   const [toggle,setToggle] = useState(false);
+  const [text,setText] = useState('User');
   //RENDERIZA NOVAMENTE OS COMPONENTES
   const handleRefresh = () => {
     setRefresh(false);
@@ -37,7 +38,13 @@ const Content = () => {
               <div className={style.header}>
                 <Name />
                 <IoMdRefresh onClick={handleRefresh} className={style.icon}/>
-                <Toggle handleRefresh={handleRefresh} toggle={toggle} setToggle={setToggle}/>
+                <Toggle 
+                  handleRefresh={handleRefresh} 
+                  toggle={toggle} 
+                  setToggle={setToggle}
+                  text={text}
+                  setText={setText}
+                />
                 
               </div> 
                 <DayInfo />

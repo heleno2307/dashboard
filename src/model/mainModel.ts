@@ -882,6 +882,7 @@ export default class Model {
                AND F2_VEND1 BETWEEN @SELLER AND @SELLER1
                AND F2_EMISSAO BETWEEN @DATE AND @DATE1
                AND F2_CLIENTE + F2_LOJA NOT IN (SELECT #FILIAIS.A1_COD + A1_LOJA FROM #FILIAIS)
+               AND F2_TIPO = 'N'
             GROUP BY
                D2_EMISSAO
             ORDER BY
