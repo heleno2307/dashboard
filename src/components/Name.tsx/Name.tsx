@@ -1,9 +1,8 @@
 import { useToast } from "@/context/toastContext";
 import { useUserContext } from "@/context/userContext";
-import { useFetch } from "@/hook/useFetch";
 import getName from "@/routes/getName";
 import capitalizeNames from "@/utilities/capitalizeNames";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Data = [
    {
@@ -17,7 +16,7 @@ const Name = ()=>{
    const [name, setName] = useState('');
    const {showToast} = useToast()
 
-   const hendlerError = (error: unknown) => {
+   const hendlerError = useCallback((error: unknown) => {
       if (error === 404) {
         showToast('erro', 'Error 02, contactar administrador', 4000);
         setName('Desconhecido');
@@ -34,11 +33,11 @@ const Name = ()=>{
         showToast('erro', 'Error 05, contactar administrador', 4000);
         setName('Desconhecido');
       }
-   };
+   },[showToast]);
 
 
    //REALIZA UMA REQUISICAO PARA PEGAR NOME DO USUARIO
-   useFetch(async()=>{
+   const fetchData = useCallback(async()=>{
       if(user != null){
          try {
             const data:Data = await getName(user.code);
@@ -48,7 +47,11 @@ const Name = ()=>{
          }
          
       }
-   },[user]);
+   },[user,hendlerError]);
+
+   useEffect(()=>{
+      fetchData();
+   },[fetchData])
  
    //REALIZA UMA CHECAGEM NO DADO E TRATA O DADO
    const checkData = (data:Data)=>{

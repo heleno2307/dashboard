@@ -1,9 +1,7 @@
 import { useUserContext } from "@/context/userContext"
 import style from "./Clients.module.scss"
-import { useFetch } from "@/hook/useFetch"
 import getClients from "@/routes/getClients"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { newDate } from "@/utilities/newDate"
 import { ImSpinner8 } from "react-icons/im"
 import Popup from "../Popup/Popup"
 import Client from "../Client/Client"
@@ -62,7 +60,7 @@ const Clients = ()=>{
    }, [setClients, setClientsAux,showToast]);
    
    //FAZ UMA REQUISICAO PARA OBTER UMA LISTA DE CLIENTES
-   useFetch(async()=>{
+   const fetchData = useCallback(async()=>{
       if(!user) return
 
       try {
@@ -73,8 +71,8 @@ const Clients = ()=>{
            // Se for um array (clientes), atualize o estado de clientes
            setClients(data.SA1);
            setClientsAux(data.SA1)
-           setLastPage((current)=> !data.last_Page?1:data.last_Page);
-           setPage((current) => !data.next_page?0:data.next_page);
+           setLastPage(()=> !data.last_Page?1:data.last_Page);
+           setPage(() => !data.next_page?0:data.next_page);
            
          } 
      
@@ -84,7 +82,11 @@ const Clients = ()=>{
          hendlerError(error)
        }
       
-   },[user,all]);
+   },[user,all,hendlerError]);
+
+   useEffect(()=>{
+      fetchData()
+   },[fetchData])
 
    //chamada de api para fazer paginação
    const callBackFetch = useCallback(async(user:string)=>{
@@ -95,8 +97,8 @@ const Clients = ()=>{
             // Se for um array (clientes), atualize o estado de clientes
             setClients((current:any)=> [...current,...data.SA1]);
             setClientsAux((current:any)=> [...current,...data.SA1]);
-            setLastPage((current)=> data.last_Page);
-            setPage((current) => data.next_page);
+            setLastPage(()=> data.last_Page);
+            setPage(() => data.next_page);
 
          }
 
@@ -106,6 +108,7 @@ const Clients = ()=>{
       }
 
    },[page,all,hendlerError]);
+   
    
    //efeito que manitora se elemento é visivél e chama api se necessário
    useEffect(() => {

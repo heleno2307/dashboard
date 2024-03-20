@@ -1,8 +1,7 @@
 import { newDate } from "@/utilities/newDate";
 import style from "./Client.module.scss"
 import { useUserContext } from "@/context/userContext";
-import { useFetch } from "@/hook/useFetch";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import getClient from "@/routes/getClient";
 import { ImSpinner8 } from "react-icons/im";
 import { useToast } from "@/context/toastContext";
@@ -31,10 +30,11 @@ const Client = ({client}:Props)=>{
    const {showToast} = useToast();
    const {all} = useAllContext()
 
-   useFetch(async()=>{
+   const fetchData = useCallback(async()=>{
       if(!user || !client?.A1_LOJA || !client.D2_CLIENTE || !client) return
       try {
          const data= await getClient(user.code,client.A1_LOJA,client.D2_CLIENTE,all)
+
          if(data.VARIACAO){
             setVariacao(data.VARIACAO);
             alterColor(data);
@@ -43,7 +43,6 @@ const Client = ({client}:Props)=>{
          
       } catch (error) {
          //tratar error
-         console.log(error)
          if (error === 404) {
             showToast('erro', 'Error 02, contactar administrador', 4000);
             setVariacao(0);
@@ -61,7 +60,11 @@ const Client = ({client}:Props)=>{
             setVariacao(0);
           }
       }
-   },[user,all]);
+   },[user,all,client,showToast]);
+
+   useEffect(()=>{
+      fetchData();
+   },[fetchData])
 
    const alterColor = (data:Variacao)=>{
       if(data.VARIACAO > 0){

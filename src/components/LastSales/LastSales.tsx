@@ -15,19 +15,6 @@ import { useToast } from '@/context/toastContext';
 import { useAllContext } from '@/context/allContext';
 import getInitial from '@/routes/get.initial';
 
-
-type MonthlySale = {
-   D2_TOTAL:number;
-   D2_CUSTO1:number;
-   D2_EMISSAO:string
-}
-
-type DevolutionMonthly = {
-   TOTAL:number;
-   D1_DTDIGIT:string
-}
-
-
 type Initial = {
    SD1:{
       D1_DTDIGIT:string,

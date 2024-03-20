@@ -1,9 +1,8 @@
-import { useFetch } from '@/hook/useFetch';
 import style from './Devolution.module.scss';
 import { useUserContext } from '@/context/userContext';
 import getDevolution from '@/routes/getDevolution';
 import { getDate } from '@/utilities/getDate';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { newDate } from '@/utilities/newDate';
 import { replaceDate } from '@/utilities/replaceDate';
 import { ImSpinner8 } from 'react-icons/im';
@@ -30,7 +29,7 @@ const Devolution = ()=>{
    const {all} = useAllContext()
 
    //FAZ UMA REQUISIÇÃO PARA OBTER AS DEVOLUCOES DETALHADAS
-   useFetch(async () => {
+   const fetchData = useCallback(async () => {
       if (!user) return;
       try {
          const data = await getDevolution(user.code, replaceDate(getDate()),all);
@@ -56,9 +55,12 @@ const Devolution = ()=>{
             setDevolution([])
          }
       }
-   }, [user,all]);
+   }, [user,all,showToast]);
    
-
+   useEffect(()=>{
+      fetchData();
+   },[fetchData])
+   
    //AO ALTERAR DATA REALIZA A REQUISICAO NOVAMENTE
    const hendlerDate = async () => {
       if (!user || !dateRef.current?.value) return;

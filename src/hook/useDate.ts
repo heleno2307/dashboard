@@ -4,7 +4,7 @@ type Ref = {
    current?: {
      value: string;
    } | null;
- };
+};
  
 
 export const useDate = (dateIniRef:Ref,dateFimRef:Ref,dateIni:string,dateFim:string)=>{
@@ -13,5 +13,5 @@ export const useDate = (dateIniRef:Ref,dateFimRef:Ref,dateIni:string,dateFim:str
          dateIniRef.current.value = dateIni;
          dateFimRef.current.value = dateFim;
       }
-   }, [dateIni, dateFim]);
+   }, [dateIni, dateFim,dateFimRef,dateIniRef]);
 }

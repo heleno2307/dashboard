@@ -1,8 +1,7 @@
-import { useFetch } from "@/hook/useFetch";
 import style from "./Itens.module.scss";
 import { useUserContext } from "@/context/userContext";
 import getItens from "@/routes/getItens";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import limitarCaracteres from "@/utilities/limitarCaracteres";
 import { ImSpinner8 } from "react-icons/im";
 import { useToast } from "@/context/toastContext";
@@ -27,7 +26,7 @@ const Itens =({order}:Prop)=>{
    const [itens, setItens]= useState<SC6[]|null>(null)
    const {showToast} = useToast()
 
-   useFetch (async()=>{
+   const fetchData = useCallback (async()=>{
       if(!user || !order?.filial || !order?.order)return;
 
       try {
@@ -57,7 +56,11 @@ const Itens =({order}:Prop)=>{
           }
       }
      
-   },[user]);
+   },[user,order?.filial,order?.order,showToast]);
+
+   useEffect(()=>{
+      fetchData()
+   },[fetchData])
 
    if(!itens){
       return(

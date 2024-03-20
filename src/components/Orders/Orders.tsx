@@ -8,7 +8,6 @@ import { getInitialDateOrder } from '@/utilities/getInitialDate';
 import { getDate } from '@/utilities/getDate';
 import { ImSpinner8 } from "react-icons/im";
 import { useDate } from '@/hook/useDate';
-import { useFetch } from '@/hook/useFetch';
 import Popup from '../Popup/Popup';
 import Itens from '../Itens/Itens';
 import Toast from '../Toast/Toast';
@@ -93,7 +92,7 @@ const Orders = ()=>{
   
   
    //BUSCA NA API UMA LISTA DE PEDIDOS
-   useFetch(async () => {
+   const fetchData = useCallback(async () => {
       if (!user) return;
       try {
 
@@ -116,8 +115,11 @@ const Orders = ()=>{
          // Tratar erro
         hendlerError(error);
       }
-   }, [user, all]);
-    
+   }, [user, all,hendlerError]);
+   
+   useEffect(()=>{
+      fetchData()
+   },[fetchData])
    
    const callbackFetch = useCallback(async(
       user:string,
@@ -153,14 +155,13 @@ const Orders = ()=>{
    useEffect(() => {
       if (typeof window !== 'undefined' && user) {
          
-
          const options = {
             root: null,
             rootMargin: '0px',
             threshold: 0.5,
          };
    
-         const callback: IntersectionObserverCallback = (entries, observer) => {
+         const callback: IntersectionObserverCallback = (entries) => {
             
             entries.forEach((entry) => {
                if(!dateFimRef.current?.value || !dateIniRef.current?.value) return;
@@ -252,7 +253,7 @@ const Orders = ()=>{
 
       try {
          const data = await getInputFilter(user.code,dateini,dateFim,filterInput,all);
-         console.log(data)
+
          if(Array.isArray(data.SC5)){
             setSales(data.SC5);
             setSalesFilter(data.SC5);
@@ -285,7 +286,6 @@ const Orders = ()=>{
          } 
       } catch (error) {
          //tratar error
-         console.log(error);
          hendlerError(error);
       }
      
@@ -327,7 +327,7 @@ const Orders = ()=>{
                      />
                      <input 
                         type="text" 
-                        placeholder='Filtor' 
+                        placeholder='Filtro...' 
                         className={style.input_date_order}
                         value={filterInput} 
                         onChange={(e)=> setFilterInput( e.target.value)}

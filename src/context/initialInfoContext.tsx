@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import {ReactNode} from 'react';
 import { useFetch } from "@/hook/useFetch";
 import { useUserContext } from "./userContext";
@@ -51,7 +51,7 @@ const InitialProvider = ({ children }: Props) => {
    const {showToast} = useToast()
    const {all} = useAllContext()
 
-   useFetch(async () => {
+   const fetchData = useCallback(async () => {
       if (!user) return;
       try {
          const data = await getInitial(user.code, getInitialDate(), getDate(),all);
@@ -60,7 +60,6 @@ const InitialProvider = ({ children }: Props) => {
          }
 
       } catch (error) {
-         console.log(error)
          if (error === 404) {
             showToast('erro', 'Error 02, contactar administrador', 4000);
           } else if (error === 500) {
@@ -73,7 +72,11 @@ const InitialProvider = ({ children }: Props) => {
             showToast('erro', 'Error 05, contactar administrador', 4000);
          }
       }
-   }, [user, setInitial,all]);
+   }, [user, setInitial,all,showToast]);
+
+   useEffect(()=>{
+      fetchData();
+   },[fetchData])
 
    // Se 'initial' ainda for null, você pode decidir o que fazer neste ponto
    if (initial === null) {
