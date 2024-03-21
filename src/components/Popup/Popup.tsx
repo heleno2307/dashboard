@@ -20,6 +20,14 @@ const Popup = ({children,width=500,state,setState}:Props)=>{
          setHide(false)
       },600);
    }
+   useEffect(()=>{
+      if(state){
+         document.body.style.overflow = 'hidden'
+      }
+      return ()=>{
+         document.body.style.overflow = ''
+      }
+   },[state]);
 
    if(!state){
       return null;
