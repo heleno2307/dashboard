@@ -8,12 +8,13 @@ type Props = {
 }
 type UserContext = {
    user:User | null;
-   hendlerUser: (code:string,data:Data)=> void;
+   hendlerUser: (code:string,data:Data,admin:boolean)=> void;
    logOut: ()=>void
 }
 type User = {
    code:string;
-   data:Data
+   data:Data;
+   admin:boolean
 }
 type Data ={
    access_token:string;
@@ -38,17 +39,19 @@ const UserProvider = ({ children }: Props) => {
 
          setUser({
             code: userSession.code,
-            data: userSession.data
+            data: userSession.data,
+            admin:userSession.admin
          });
         }
       }
    }, [user]);    
    
    //SALVA USUARIO
-   const hendlerUser = (code: string, data: Data) => {
+   const hendlerUser = (code: string, data: Data,admin:boolean) => {
       setUser({
          code: code,
          data: data,
+         admin:admin
       });
    }; 
 

@@ -930,5 +930,46 @@ export default class Model {
       }
    }
          
-   
+   async getSYS_GROUP(userId:string){
+      try{
+         const pool = await new ConnectionPool(config).connect();
+         const result = await pool.request()
+         .input('USUARIO',VarChar, userId)
+         .query(`
+            USE TMPRD;
+            SELECT
+               USR_GRUPO
+            FROM
+               SYS_USR_GROUPS
+            WHERE
+               USR_ID = @USUARIO
+               
+         `)
+         return result.recordset;
+      }catch(err){
+         console.error('Erro ao executar a consulta:', err);
+         throw err;
+      }
+   }
+   async getSYS_USR_COD(userId:string){
+      try{
+         const pool = await new ConnectionPool(config).connect();
+         const result = await pool.request()
+         .input('USUARIO',VarChar, userId)
+         .query(`
+            USE TMPRD;
+            SELECT
+               USR_ID
+            FROM
+               SYS_USR
+            WHERE
+               USR_ID = @USUARIO OR USR_CODIGO = @USUARIO
+               
+         `)
+         return result.recordset;
+      }catch(err){
+         console.error('Erro ao executar a consulta:', err);
+         throw err;
+      }
+   }
 }

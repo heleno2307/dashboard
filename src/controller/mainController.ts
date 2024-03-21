@@ -125,7 +125,7 @@ export default class Controller  {
          }
       }else{
          try {
-           const userCod =  await this.getUserCod();
+           const userCod =  await this.getSellerCod();
            const registerData = await model.getCountSales(userCod,userCod,dateIni,dateFim,);
            const register = registerData[0].CONT;
            if(register !== 0){
@@ -260,7 +260,7 @@ export default class Controller  {
       }else{
          if(filter.trim().toUpperCase() == 'NF'){
             try {
-               const userCod =  await this.getUserCod();
+               const userCod =  await this.getSellerCod();
                const registerData = await model.getCountSalesNf(userCod,userCod,dateIni,dateFim);
                const register = registerData[0].CONT;
                
@@ -292,7 +292,7 @@ export default class Controller  {
              }
          }else if(filter.trim().toUpperCase() == 'ADD' || filter.trim().toUpperCase() == 'ALT'){
             try {
-               const userCod =  await this.getUserCod();
+               const userCod =  await this.getSellerCod();
                const registerData = await model.getCountSalesAdd(userCod,userCod,dateIni,dateFim);
                const register = registerData[0].CONT;
 
@@ -324,7 +324,7 @@ export default class Controller  {
             }
          }else{
             try {
-              const userCod =  await this.getUserCod();
+              const userCod =  await this.getSellerCod();
               const registerData = await model.getCountSalesFilter(userCod,userCod,dateIni,dateFim,filter.trim().toUpperCase());
               const register = registerData[0].CONT;
 
@@ -396,7 +396,7 @@ export default class Controller  {
          }
       }else{
          try {
-           const userCod =  await this.getUserCod();
+           const userCod =  await this.getSellerCod();
            const registerData = await model.getCountSalesInput(userCod,userCod,dateIni,dateFim,filter.trim().toUpperCase());
            const register = registerData[0].CONT;
            if(register !== 0){
@@ -435,11 +435,11 @@ export default class Controller  {
       try {
       
          if(admin){
-            const userCod = await this.getUserCod();
+            const userCod = await this.getSellerCod();
             const data:CurrentDevolution[] = await model.getDevolutionDatails('','999999',date);
             return data;
          }else{
-            const userCod = await this.getUserCod();
+            const userCod = await this.getSellerCod();
             const data:CurrentDevolution[] = await model.getDevolutionDatails(userCod,userCod,date);
             return data;
          }
@@ -451,7 +451,7 @@ export default class Controller  {
    }
 
    //RETORNA O CODIGO DE VENDEDOR
-   async getUserCod(){
+   async getSellerCod(){
       const user:UserData[] = await model.getName(this.loginUser);
       return user[0].A3_COD;
    }
@@ -497,7 +497,7 @@ export default class Controller  {
            
          }else{
             try {
-               const userCod = await this.getUserCod();
+               const userCod = await this.getSellerCod();
                const registerData = await model.getCountClients(userCod,date180,userCod);
                const register = registerData[0].CONT;
 
@@ -573,7 +573,7 @@ export default class Controller  {
         
       }else{
          try {
-            const userCod = await this.getUserCod();
+            const userCod = await this.getSellerCod();
             const registerData = await model.getCountClientsFilter(userCod,date180,userCod,filter.trim().toUpperCase());
             const register = registerData[0].CONT;
 
@@ -613,7 +613,7 @@ export default class Controller  {
       if(admin == null || admin == undefined || !codClient || !loja) return 401
   
       try {
-         const userCod = await this.getUserCod();
+         const userCod = await this.getSellerCod();
          const days = subtrairDias(179);
          let movimentos:Moviment[];
          if(admin){
@@ -702,7 +702,7 @@ export default class Controller  {
      
       }else{
          try {
-            const userCod = await this.getUserCod();
+            const userCod = await this.getSellerCod();
             devolutions = await model.getSD1(userCod,userCod,dateIni,dateFim);
             sales = await model.getSD2(userCod,userCod,dateIni,dateFim);
          } catch (error) {
@@ -767,6 +767,31 @@ export default class Controller  {
          return 402;
       }
       
+   }
+
+   async getAdminUser(userId:string){
+      if(!userId) return 401
+      let admin = false
+
+      try {
+         const USR_ID = await model.getSYS_USR_COD(userId);
+         if(USR_ID.length <= 0) return 401
+
+         const user = USR_ID[0].USR_ID
+         const USR_GROUP = await model.getSYS_GROUP(user)
+
+         USR_GROUP.forEach((el)=>{
+            if(el.USR_GRUPO == '000022'){
+               admin =true
+            }
+         })
+         
+         return {
+            access: admin
+         }
+      } catch (error) {
+         return 402
+      }
    }
 
 }

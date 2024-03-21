@@ -11,6 +11,7 @@ import Toast from "../Toast/Toast";
 import { useToast } from "@/context/toastContext";
 import { useUserContext } from "@/context/userContext";
 import { useRouter } from "next/router";
+import getAdmin from "@/routes/getAdmin";
 
 type Data ={
   access_token:string;
@@ -47,7 +48,8 @@ const Login = ()=>{
     try {
       if(!BASE_URL)return;
       const data = await getUser(BASE_URL,user,password);
-
+      
+    
       // checa se o retorno da api veio com algum erro.
       if(!checkData(data)){
         setBtn(true);
@@ -55,11 +57,18 @@ const Login = ()=>{
         inputUserRef.current.value = '';
         return;
       } 
+
+      const admin = await getAdmin(user);
       
       //altera os estados 
       setBtn(true);
-      saveUser(data,user);
-      router.push('/Dashboard');
+      saveUser(data,user,admin.access);
+      
+      if(!admin.access){
+        router.push('/Dashboard');
+      }else{
+        router.push('/dashboard/admin');
+      }
     } catch (error) {
       console.log(error)
     }
@@ -80,13 +89,14 @@ const Login = ()=>{
   }
 
   //SALVA OS DADOS DO USUARIO
-  const saveUser = (data:Data,userLogin:string)=>{
+  const saveUser = (data:Data,userLogin:string,admin:boolean)=>{
     const user = {
       code:userLogin,
       data,
+      admin
     }
     sessionStorage.setItem('user',JSON.stringify(user));
-    hendlerUser(userLogin,data);
+    hendlerUser(userLogin,data,admin);
   }
   
   return(
