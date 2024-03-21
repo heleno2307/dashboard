@@ -5,13 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import limitarCaracteres from "@/utilities/limitarCaracteres";
 import { ImSpinner8 } from "react-icons/im";
 import { useToast } from "@/context/toastContext";
+import { useOrderContext } from "@/context/orderContext";
 
-type Prop = {
-   order:{
-      order:string|null,
-      filial:string|null
-   }|null;
-} 
 type SC6 = {
    C6_ITEM:string;
    C6_PRODUTO:string;
@@ -21,10 +16,11 @@ type SC6 = {
    C6_QTDVEN:number
    B1_DESC:string
 }
-const Itens =({order}:Prop)=>{
+const Itens =()=>{
    const {user}=useUserContext();
    const [itens, setItens]= useState<SC6[]|null>(null)
    const {showToast} = useToast()
+   const {order} = useOrderContext()
 
    const fetchData = useCallback (async()=>{
       if(!user || !order?.filial || !order?.order)return;
@@ -37,7 +33,6 @@ const Itens =({order}:Prop)=>{
          
       } catch (error) {
          //tratar error
-         console.log(error);
          if (error === 404) {
             showToast('erro', 'Error 02, contactar administrador', 4000);
             setItens([])

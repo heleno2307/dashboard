@@ -1,6 +1,7 @@
 import { Dispatch, FC, RefObject, SetStateAction } from "react";
 import style from './Orders.module.scss'
 import { newDate } from "@/utilities/newDate";
+import { useOrderContext } from "@/context/orderContext";
 
 interface Props {
    setPopup: Dispatch<SetStateAction<boolean>>,
@@ -30,83 +31,86 @@ type Sales = {
    C5_ZVERSAO:string
    C5_TRANSP:String
 }
-export const OrderList:FC<Props> = ({salesFilter,setOrder,setPopup,targetRef})=> {
+export const OrderList:FC<Props> = ({setPopup,targetRef})=> {
+   const {salesFilter,setOrder} = useOrderContext()
    return(
       <>
          {
-            salesFilter.map((el,i)=>(
-               (salesFilter.length - 1) == (i + 1) 
-               ?
-                  <li 
-                     id="sentinela"
-                     ref={targetRef}
-                     className={`
-                        ${style.orders_list} 
-                        ${el.C5_ZSTSOSS == 'ADD'?style.new_order:null}
-                        ${el.C5_ZSTSOSS == 'SPN'?style.yellow_order:null}
-                        ${el.C5_ZSTSOSS == 'SPD'?style.confirm_order:null}
-                        ${el.C5_ZSTSOSS == 'ALT'?style.alter_order:null}
-                     `}
-                     key={i}
-                     onClick={()=>{
-                        setPopup(true)
-                        setOrder({
-                           filial:el.C5_FILIAL,
-                           order:el.C5_NUM 
-                        });
-                     }}
-                  >  
-                     <div className={style.date_order}>
-                        <p>{newDate(el.C5_EMISSAO)}</p>
-                        <p>{el.C5_ZHORA}</p>
-                     </div>
-                              
-                     <p>{el.C5_FILIAL}</p>
-                     <p>{el.C5_NUM} / {el.C5_ZVERSAO}</p>
-                     <p>{el.C5_NOMECLI}</p>
-                     <p>{el.C6_VALOR.toFixed(2)}</p>
-                     <p>{el.C5_TRANSP}</p>
-                     {el.C5_ZSTSOSS == 'SPD'?<p>Confirmado</p>:null}
-                     {el.C5_ZSTSOSS == 'SPN'?<p>Pendente de Confirmação</p>:null}
-                     {el.C5_ZSTSOSS == 'ADD'?<p>Pendente de Separação</p>:null}
-                     {el.C5_ZSTSOSS == 'ALT'?<p>Alterado</p>:null}
-                     <p>{el.C5_NOTA?el.C5_NOTA:null}</p>
-                  </li>
-               :
-                  <li 
-                     className={`
-                        ${style.orders_list} 
-                        ${el.C5_ZSTSOSS == 'ADD'?style.new_order:null}
-                        ${el.C5_ZSTSOSS == 'SPN'?style.yellow_order:null}
-                        ${el.C5_ZSTSOSS == 'SPD'?style.confirm_order:null}
-                        ${el.C5_ZSTSOSS == 'ALT'?style.alter_order:null}
-                     `}
-                     key={i}
-                     onClick={()=>{
-                        setPopup(true)
-                        setOrder({
-                           filial:el.C5_FILIAL,
-                           order:el.C5_NUM 
-                        });
-                     }}
-                  >  
-                     <div className={style.date_order}>
-                        <p>{newDate(el.C5_EMISSAO)}</p>
-                        <p>{el.C5_ZHORA}</p>
-                     </div>
-                              
-                     <p>{el.C5_FILIAL}</p>
-                     <p>{el.C5_NUM} / {el.C5_ZVERSAO}</p>
-                     <p>{el.C5_NOMECLI}</p>
-                     <p>{el.C6_VALOR}</p>
-                     <p>{el.C5_TRANSP}</p>
-                     {el.C5_ZSTSOSS == 'SPD'?<p>Confirmado</p>:null}
-                     {el.C5_ZSTSOSS == 'SPN'?<p>Pendente de Confirmação</p>:null}
-                     {el.C5_ZSTSOSS == 'ADD'?<p>Pendente de Separação</p>:null}
-                     {el.C5_ZSTSOSS == 'ALT'?<p>Alterado</p>:null}
-                     <p>{el.C5_NOTA?el.C5_NOTA:null}</p>
-                  </li>
-            ))
+            salesFilter && (
+               salesFilter.map((el,i)=>(
+                  (salesFilter.length - 1) == (i + 1) 
+                  ?
+                     <li 
+                        id="sentinela"
+                        ref={targetRef}
+                        className={`
+                           ${style.orders_list} 
+                           ${el.C5_ZSTSOSS == 'ADD'?style.new_order:null}
+                           ${el.C5_ZSTSOSS == 'SPN'?style.yellow_order:null}
+                           ${el.C5_ZSTSOSS == 'SPD'?style.confirm_order:null}
+                           ${el.C5_ZSTSOSS == 'ALT'?style.alter_order:null}
+                        `}
+                        key={i}
+                        onClick={()=>{
+                           setPopup(true)
+                           setOrder({
+                              filial:el.C5_FILIAL,
+                              order:el.C5_NUM 
+                           });
+                        }}
+                     >  
+                        <div className={style.date_order}>
+                           <p>{newDate(el.C5_EMISSAO)}</p>
+                           <p>{el.C5_ZHORA}</p>
+                        </div>
+                                 
+                        <p>{el.C5_FILIAL}</p>
+                        <p>{el.C5_NUM} / {el.C5_ZVERSAO}</p>
+                        <p>{el.C5_NOMECLI}</p>
+                        <p>{el.C6_VALOR.toFixed(2)}</p>
+                        <p>{el.C5_TRANSP}</p>
+                        {el.C5_ZSTSOSS == 'SPD'?<p>Confirmado</p>:null}
+                        {el.C5_ZSTSOSS == 'SPN'?<p>Pendente de Confirmação</p>:null}
+                        {el.C5_ZSTSOSS == 'ADD'?<p>Pendente de Separação</p>:null}
+                        {el.C5_ZSTSOSS == 'ALT'?<p>Alterado</p>:null}
+                        <p>{el.C5_NOTA?el.C5_NOTA:null}</p>
+                     </li>
+                  :
+                     <li 
+                        className={`
+                           ${style.orders_list} 
+                           ${el.C5_ZSTSOSS == 'ADD'?style.new_order:null}
+                           ${el.C5_ZSTSOSS == 'SPN'?style.yellow_order:null}
+                           ${el.C5_ZSTSOSS == 'SPD'?style.confirm_order:null}
+                           ${el.C5_ZSTSOSS == 'ALT'?style.alter_order:null}
+                        `}
+                        key={i}
+                        onClick={()=>{
+                           setPopup(true)
+                           setOrder({
+                              filial:el.C5_FILIAL,
+                              order:el.C5_NUM 
+                           });
+                        }}
+                     >  
+                        <div className={style.date_order}>
+                           <p>{newDate(el.C5_EMISSAO)}</p>
+                           <p>{el.C5_ZHORA}</p>
+                        </div>
+                                 
+                        <p>{el.C5_FILIAL}</p>
+                        <p>{el.C5_NUM} / {el.C5_ZVERSAO}</p>
+                        <p>{el.C5_NOMECLI}</p>
+                        <p>{el.C6_VALOR}</p>
+                        <p>{el.C5_TRANSP}</p>
+                        {el.C5_ZSTSOSS == 'SPD'?<p>Confirmado</p>:null}
+                        {el.C5_ZSTSOSS == 'SPN'?<p>Pendente de Confirmação</p>:null}
+                        {el.C5_ZSTSOSS == 'ADD'?<p>Pendente de Separação</p>:null}
+                        {el.C5_ZSTSOSS == 'ALT'?<p>Alterado</p>:null}
+                        <p>{el.C5_NOTA?el.C5_NOTA:null}</p>
+                     </li>
+               ))
+            )
          }
       </>
    )

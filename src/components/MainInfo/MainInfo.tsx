@@ -1,3 +1,4 @@
+import { OrderContextProvider } from "@/context/orderContext"
 import Clients from "../Clients/Clients"
 import LastSales from "../LastSales/LastSales"
 import Orders from "../Orders/Orders"
@@ -11,7 +12,9 @@ const MainInfo = ()=>{
             <Clients/>
          </section>
          <section className={style.main_list_order}>
-            <Orders/>   
+            <OrderContextProvider>
+               <Orders/> 
+            </OrderContextProvider>
          </section>
       </>
      

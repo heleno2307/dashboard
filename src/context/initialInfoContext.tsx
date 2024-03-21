@@ -1,7 +1,6 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import {ReactNode} from 'react';
-import { useFetch } from "@/hook/useFetch";
 import { useUserContext } from "./userContext";
 import { getInitialDate } from "@/utilities/getInitialDate";
 import { getDate } from "@/utilities/getDate";
@@ -100,7 +99,7 @@ const InitialProvider = ({ children }: Props) => {
 const useInitialContext = () => {
    const context = useContext(initialContext);
    if (!context) {
-     throw new Error("useTalks must be used within a TalksProvider");
+     throw new Error("useInitialContext must be used within a initialContext");
    }
    return context;
 };
