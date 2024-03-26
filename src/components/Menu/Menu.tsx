@@ -7,13 +7,19 @@ import { CiLogout } from "react-icons/ci";
 import { useState } from 'react';
 import { useUserContext } from '@/context/userContext';
 import Link from 'next/link';
+import { FiBarChart } from 'react-icons/fi';
+import { useRouter } from 'next/router';
 const Menu = ()=>{
-   const {logOut} = useUserContext()
+   const {logOut,user} = useUserContext()
+   const router = useRouter();
+   const [rota,setRota] = useState(router.asPath)
+  
    const [colors,setColors] = useState({
-      home: true,
+      home: rota === '/Dashboard'?true:false,
       mktzap: false,
       bubble:false,
       whatsApp:false,
+      admin: rota === '/dashboard/admin'?true:false
    });
 
    /*
@@ -27,7 +33,8 @@ const Menu = ()=>{
                bubble:false,
                home:false,
                mktzap:true,
-               whatsApp:false
+               whatsApp:false,
+               admin:false
             })
          }
       }else if(name == 'whatsApp'){
@@ -36,7 +43,8 @@ const Menu = ()=>{
                bubble:false,
                home:false,
                mktzap:false,
-               whatsApp:true
+               whatsApp:true,
+               admin: false
             })
          }
       }else if(name == 'bubble'){
@@ -45,7 +53,8 @@ const Menu = ()=>{
                bubble:true,
                home:false,
                mktzap:false,
-               whatsApp:false
+               whatsApp:false,
+               admin: false
             })
          }
       }else if(name == 'home'){
@@ -54,7 +63,18 @@ const Menu = ()=>{
                bubble:false,
                home:true,
                mktzap:false,
-               whatsApp:false
+               whatsApp:false,
+               admin: false
+            })
+         }
+      }else if(name == 'admin'){
+         if(!colors.admin){
+            setColors({
+               bubble:false,
+               home: false,
+               mktzap:false,
+               whatsApp:false,
+               admin: true
             })
          }
       }
@@ -67,7 +87,9 @@ const Menu = ()=>{
                className={`${style.div_icon} ${colors.home?style.active:null}`} 
                onClick={()=>chengeColor('home')}
             >
-             <IoMdHome className={style.menu_icon}/>
+               <Link href={'/Dashboard'} className={style.link}>
+                  <IoMdHome className={style.menu_icon}/>
+               </Link>
             </div>
             <div 
                className={`${style.div_icon} ${colors.mktzap?style.active:null}`} 
@@ -99,6 +121,20 @@ const Menu = ()=>{
                </Link>
                
             </div>
+            {
+               user?.admin &&(
+                  <div 
+                     className={`${style.div_icon} ${colors.admin?style.active:null}`} 
+               
+                     onClick={()=>chengeColor('admin')}
+                  >
+                     <Link href={'/dashboard/admin'} className={style.link}>
+                        <FiBarChart className={style.menu_icon} />
+                     </Link>
+                     
+                  </div>
+               )
+            }
          </div>
          <div className={style.bottom} onClick={logOut}>
             <CiLogout className={style.menu_icon}/>

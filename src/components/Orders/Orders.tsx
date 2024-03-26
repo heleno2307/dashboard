@@ -26,7 +26,6 @@ const Orders = ()=>{
    const { all } = useAllContext();
 
    const {
-      order,
       sales,
       setOrder,
       setSales,
