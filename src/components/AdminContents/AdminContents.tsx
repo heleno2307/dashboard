@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './AdminContents.module.scss';
-import dynamic from 'next/dynamic';
 import Name from '../Name.tsx/Name';
 import YearsChatSales from '../YearsChartSales/YearsChartSales';
 import { useUserContext } from '@/context/userContext';
 import { useRouter } from 'next/router';
+import SelectSeller from '../SelectSeller/SelectSeller';
+import { SellerContextProvider } from '@/context/sellerContext';
+import OrderChart from '../OrderChart/OrderChart';
+
+
 
 
 export default function AdminContents(){
    const route = useRouter();
    const {user} = useUserContext()
+   
    useEffect(() => {
       if (user && typeof window !== undefined && typeof window !== null) {
         if (!user.admin) {
@@ -17,10 +22,16 @@ export default function AdminContents(){
         }
       }
     });
+
    return(
       <section className={styles.content}>
          <Name/>
-         <YearsChatSales/>  
+         <SellerContextProvider>
+            <SelectSeller/>
+            <YearsChatSales/>
+            <OrderChart/>
+         </SellerContextProvider>
+        
       </section>
    )
 }

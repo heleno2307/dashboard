@@ -1012,10 +1012,8 @@ export default class Controller {
       const sd2 = await model.getSD2(sellerInit, sellerInit, dateIni, dateFim);
       const sd1 = await model.getSD1(sellerInit, sellerInit, dateIni, dateFim);
       const primeiraData = parseISO(dateIni);
-      console.log(primeiraData)
       const segundaData = parseISO(dateFim);
-      const dateDiff = Math.ceil(Math.abs(differenceInDays(primeiraData,segundaData))/30)
-      console.log(differenceInDays(primeiraData,segundaData))
+      const dateDiff = (Math.ceil(Math.abs(differenceInDays(primeiraData,segundaData))/30)) - 1 
       const monthNames:any = {
         1: "Janeiro",
         2: "Fevereiro",
@@ -1077,24 +1075,27 @@ export default class Controller {
 
         return resultArray;
       };
-      const monthArry = (months:number,month:number)=>{
+      const monthArry = (months:number,month:number,date:Date)=>{
         const arr = Array(Math.abs(months)).fill('');
+        
 
         for (let i = 0; i < arr.length; i++) {
           const index = (i  + month) % 12 || 12; 
-          arr[i] = monthNames[index];
+          if( i >= 12){
+            arr[i] = `${monthNames[index]} ${date.getUTCFullYear() + 1}`;
+          }else{
+            arr[i] = `${monthNames[index]} ${date.getUTCFullYear()}`;
+          }
           
         }
 
         return arr
       }
       
-
-      
-
       const SD1: any = SomaPorMes(sd1);
       const SD2: any = SomaPorMes(sd2);
-      const months = monthArry(dateDiff,primeiraData.getUTCMonth() + 1)
+      const months = monthArry(dateDiff,primeiraData.getUTCMonth() + 1,primeiraData)
+      console.log(months)
       return {
         lengthDate: dateDiff,
         months,
@@ -1104,6 +1105,27 @@ export default class Controller {
       };
     } catch (error) {
       return 402;
+    }
+  }
+
+  async getSeller(){
+    try {
+      const data = await model.getSA3();
+      return data
+    } catch (error) {
+      return 402;
+    }
+  }
+  async getCountSC5(seller:string,dateIni:string,dateFim:string){
+    try {
+      const deletedOrder = await model.getCountSC5(seller,dateIni,dateFim,false);
+      const order =  await model.getCountSC5(seller,dateIni,dateFim,true);
+      return {
+        total_deleted: deletedOrder[0].TOTAL,
+        total_order: order[0].TOTAL
+      }
+    } catch (error) {
+      return 402
     }
   }
 }

@@ -1,12 +1,15 @@
-.sectionContent{
-   margin-top: 2rem;
+.content{
    display: flex;
    flex-direction: column;
-   justify-content: center;
    align-items: center;
-   width: 100%;
+   justify-content: center;
+   margin-top: 1rem;
 }
-
+.chart{
+   display: flex;
+   margin-top: 3rem;
+   margin-left: 9rem;
+}
 .years{
    display: flex;
    gap: 5px;

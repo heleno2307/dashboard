@@ -972,4 +972,50 @@ export default class Model {
          throw err;
       }
    }
+   async getSA3(){
+      try{
+         const pool = await new ConnectionPool(config).connect();
+         const result = await pool.request()
+         .query(`
+            USE TMPRD;
+            SELECT
+               A3_COD,
+               A3_NOME
+            FROM
+               SA3010 (NOLOCK)
+            WHERE
+               SA3010.D_E_L_E_T_ = ''
+            ORDER BY
+               A3_NOME
+         `)
+         return result.recordset;
+      }catch(err){
+         console.error('Erro ao executar a consulta:', err);
+         throw err;
+      }
+   }
+   async getCountSC5(seller:string,dateIni:string,dateFim:string,existOrder:boolean){
+      try{
+         const pool = await new ConnectionPool(config).connect();
+         const result = await pool.request()
+         .input('SELLER',VarChar,seller)
+         .input('DATE',VarChar,dateIni)
+         .input('DATE1',VarChar,dateFim)
+         .query(`
+            USE TMPRD;
+            SELECT
+               COUNT(*) AS 'TOTAL'
+            FROM
+               SC5010 (NOLOCK)
+            WHERE
+               SC5010.D_E_L_E_T_='${existOrder?'':'*'}'
+               AND C5_EMISSAO BETWEEN @DATE AND @DATE1
+               AND C5_VEND1 = @SELLER
+         `)
+         return result.recordset;
+      }catch(err){
+         console.error('Erro ao executar a consulta:', err);
+         throw err;
+      }
+   }
 }

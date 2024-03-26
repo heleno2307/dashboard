@@ -1,0 +1,22 @@
+.dropdown{
+   padding: 1rem;
+   border-radius: 0.5rem;
+   background-color: #e7e7e7;
+   outline: none;
+   border: none;
+   cursor: pointer;
+   text-align: center;
+   &:hover{
+      background-color: #d6d6d6;
+   }
+}
+.divDropdown{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.divDropdown option{
+   font-size: 14px;
+   padding: 12px;
+   text-align: start;
+}
