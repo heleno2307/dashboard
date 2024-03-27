@@ -1,7 +1,12 @@
 import Model from "@/model/mainModel";
 import { subtrairDias } from "@/utilities/subtrairDias";
-import { addMonths, differenceInDays, differenceInMonths, format, parseISO } from "date-fns";
-
+import {
+  addMonths,
+  differenceInDays,
+  differenceInMonths,
+  format,
+  parseISO,
+} from "date-fns";
 
 const model = new Model();
 
@@ -591,12 +596,15 @@ export default class Controller {
   }
 
   //RETORNA DEVOLUÇÃO DETALHADA
-  async getCurrentDevolution(date: string, admin: boolean) {
+  async getCurrentDevolution(
+    date: string,
+    admin: boolean,
+    seller: string = ""
+  ) {
     if (!date || admin == null || admin == undefined) return 401;
 
     try {
       if (admin) {
-        const userCod = await this.getSellerCod();
         const data: CurrentDevolution[] = await model.getDevolutionDatails(
           "",
           "999999",
@@ -604,7 +612,7 @@ export default class Controller {
         );
         return data;
       } else {
-        const userCod = await this.getSellerCod();
+        const userCod = seller != "" ? seller : await this.getSellerCod();
         const data: CurrentDevolution[] = await model.getDevolutionDatails(
           userCod,
           userCod,
@@ -894,7 +902,12 @@ export default class Controller {
   }
 
   //RETORNA TODOS DADOS INICIAIS PARA O PROGRAMA
-  async getInitial(dateIni: string, dateFim: string, admin: boolean) {
+  async getInitial(
+    dateIni: string,
+    dateFim: string,
+    admin: boolean,
+    seller: string = ""
+  ) {
     if (!dateIni || !dateFim || admin == null || admin == undefined) return 401;
 
     let devolutions: SD1[];
@@ -917,7 +930,7 @@ export default class Controller {
       }
     } else {
       try {
-        const userCod = await this.getSellerCod();
+        const userCod = seller != "" ? seller : await this.getSellerCod();
         devolutions = await model.getSD1(userCod, userCod, dateIni, dateFim);
         sales = await model.getSD2(userCod, userCod, dateIni, dateFim);
       } catch (error) {
@@ -1013,8 +1026,10 @@ export default class Controller {
       const sd1 = await model.getSD1(sellerInit, sellerInit, dateIni, dateFim);
       const primeiraData = parseISO(dateIni);
       const segundaData = parseISO(dateFim);
-      const dateDiff = (Math.ceil(Math.abs(differenceInDays(primeiraData,segundaData))/30)) - 1 
-      const monthNames:any = {
+      const dateDiff =
+        Math.ceil(Math.abs(differenceInDays(primeiraData, segundaData)) / 30) -
+        1;
+      const monthNames: any = {
         1: "Janeiro",
         2: "Fevereiro",
         3: "Março",
@@ -1027,14 +1042,12 @@ export default class Controller {
         10: "Outubro",
         11: "Novembro",
         12: "Dezembro",
-      }
+      };
 
-      const SomaPorMes= <T extends Item>(
+      const SomaPorMes = <T extends Item>(
         arry: T[]
       ): { ano: string; mes: string; total: number }[] => {
         const resultArray: { ano: string; mes: string; total: number }[] = [];
-        ;
-
         // Objeto para armazenar as somas dos totais por ano e mês
         const somaPorMes: { [ano: string]: { [mes: string]: number } } = {};
 
@@ -1075,57 +1088,146 @@ export default class Controller {
 
         return resultArray;
       };
-      const monthArry = (months:number,month:number,date:Date)=>{
-        const arr = Array(Math.abs(months)).fill('');
-        
+      const monthArry = (months: number, month: number, date: Date) => {
+        const arr = Array(Math.abs(months)).fill("");
 
+        //realiza  uma operação para obeservar se continua no mesmo ano
         for (let i = 0; i < arr.length; i++) {
-          const index = (i  + month) % 12 || 12; 
-          if( i >= 12){
+          const index = (i + month) % 12 || 12;
+          if (i >= 12) {
             arr[i] = `${monthNames[index]} ${date.getUTCFullYear() + 1}`;
-          }else{
+          } else {
             arr[i] = `${monthNames[index]} ${date.getUTCFullYear()}`;
           }
-          
         }
 
-        return arr
-      }
-      
+        return arr;
+      };
+
       const SD1: any = SomaPorMes(sd1);
       const SD2: any = SomaPorMes(sd2);
-      const months = monthArry(dateDiff,primeiraData.getUTCMonth() + 1,primeiraData)
-      console.log(months)
+      const months = monthArry(
+        dateDiff,
+        primeiraData.getUTCMonth() + 1,
+        primeiraData
+      );
+
       return {
         lengthDate: dateDiff,
         months,
         SD1,
         SD2,
-        
       };
     } catch (error) {
       return 402;
     }
   }
 
-  async getSeller(){
+  async getSeller() {
     try {
       const data = await model.getSA3();
-      return data
+      return data;
     } catch (error) {
       return 402;
     }
   }
-  async getCountSC5(seller:string,dateIni:string,dateFim:string){
+  async getCountSC5(seller: string, dateIni: string, dateFim: string) {
     try {
-      const deletedOrder = await model.getCountSC5(seller,dateIni,dateFim,false);
-      const order =  await model.getCountSC5(seller,dateIni,dateFim,true);
+      const deletedOrder = await model.getCountSC5(
+        seller,
+        dateIni,
+        dateFim,
+        false
+      );
+      const order = await model.getCountSC5(seller, dateIni, dateFim, true);
       return {
         total_deleted: deletedOrder[0].TOTAL,
-        total_order: order[0].TOTAL
-      }
+        total_order: order[0].TOTAL,
+      };
     } catch (error) {
-      return 402
+      return 402;
+    }
+  }
+  async getSellersMonth(dateIni: string, dateFim: string) {
+    try {
+      const dataSd2 = await model.getSD2("", "999999", dateIni, dateFim);
+      const monthNames: any = {
+        1: "Janeiro",
+        2: "Fevereiro",
+        3: "Março",
+        4: "Abril",
+        5: "Maio",
+        6: "Junho",
+        7: "Julho",
+        8: "Agosto",
+        9: "Setembro",
+        10: "Outubro",
+        11: "Novembro",
+        12: "Dezembro",
+      };
+      const SomaPorMesPorNome = <
+        T extends { D2_TOTAL: number; D2_EMISSAO: string; A3_NOME: string }
+      >(
+        arry: T[]
+      ): { nome: string; ano: string; mes: string; total: number }[] => {
+        const resultArray: {
+          nome: string;
+          ano: string;
+          mes: string;
+          total: number;
+        }[] = [];
+
+        // Objeto para armazenar as somas dos totais por nome, ano e mês
+        const somaPorNome: {
+          [nome: string]: { [ano: string]: { [mes: string]: number } };
+        } = {};
+
+        arry.forEach((item) => {
+          const dataEmissao = new Date(item.D2_EMISSAO);
+          const mes = dataEmissao.getUTCMonth() + 1;
+          const ano = dataEmissao.getUTCFullYear();
+          const nomeMes = monthNames[mes];
+          const total = item.D2_TOTAL || 0;
+
+          // Se o nome ainda não foi inicializado, inicialize-o com um objeto vazio
+          if (!somaPorNome[item.A3_NOME.trim()]) {
+            somaPorNome[item.A3_NOME.trim()] = {};
+          }
+
+          // Se o ano ainda não foi inicializado, inicialize-o com um objeto vazio
+          if (!somaPorNome[item.A3_NOME.trim()][ano]) {
+            somaPorNome[item.A3_NOME.trim()][ano] = {};
+          }
+
+          // Se o total para esse mês ainda não foi inicializado, inicialize-o com 0
+          if (!somaPorNome[item.A3_NOME.trim()][ano][nomeMes]) {
+            somaPorNome[item.A3_NOME.trim()][ano][nomeMes] = 0;
+          }
+
+          // Adicione o total ao total do mês e ano correspondentes
+          somaPorNome[item.A3_NOME.trim()][ano][nomeMes] += total;
+        });
+
+        // Converter o objeto de soma em um array de objetos
+        for (const nome in somaPorNome) {
+          for (const ano in somaPorNome[nome]) {
+            for (const mes in somaPorNome[nome][ano]) {
+              resultArray.push({
+                nome,
+                ano,
+                mes,
+                total: somaPorNome[nome][ano][mes],
+              });
+            }
+          }
+        }
+
+        return resultArray;
+      };
+
+      return SomaPorMesPorNome(dataSd2);
+    } catch (error) {
+      return 402;
     }
   }
 }

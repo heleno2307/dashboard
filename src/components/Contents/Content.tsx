@@ -4,7 +4,7 @@ import style from './Content.module.scss';
 import Name from '../Name.tsx/Name';
 import MainInfo from '../MainInfo/MainInfo';
 import { IoMdRefresh } from 'react-icons/io';
-import { InitialProvider } from '@/context/initialInfoContext';
+import { InitialProvider, useInitialContext } from '@/context/initialInfoContext';
 import { ToastProvider } from '@/context/toastContext';
 import { useAllContext } from '@/context/allContext';
 import Toggle from '../Toggle/Toggle';
@@ -14,6 +14,7 @@ const Content = () => {
   const {all} = useAllContext();
   const [toggle,setToggle] = useState(false);
   const [text,setText] = useState('User');
+  const {initial} = useInitialContext()
   //RENDERIZA NOVAMENTE OS COMPONENTES
   const handleRefresh = () => {
     setRefresh(false);
@@ -31,9 +32,7 @@ const Content = () => {
 
   return (
     <>
-      <ToastProvider>
         {refresh && (
-          <InitialProvider>
             <section className={style.content}>
               <div className={style.header}>
                 <Name />
@@ -47,12 +46,10 @@ const Content = () => {
                 />
                 
               </div> 
-                <DayInfo />
+                <DayInfo initial={initial.DIA}/>
                 <MainInfo />
             </section>
-          </InitialProvider>
         )}
-      </ToastProvider>
    
     </>
   );

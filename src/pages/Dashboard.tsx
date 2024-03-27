@@ -4,6 +4,8 @@ import Head from 'next/head'
 import style from  '../sass/Dashboard.module.scss'
 import Content from "@/components/Contents/Content";
 import { AllProvider } from "@/context/allContext";
+import { InitialProvider } from "@/context/initialInfoContext";
+import { ToastProvider } from "@/context/toastContext";
 const Dashboard = ()=>{
    useUser();
    return(
@@ -17,7 +19,12 @@ const Dashboard = ()=>{
          <main className={style.main_content}>
             <AllProvider>
                <Menu/>
-               <Content/>
+               <ToastProvider>
+                  <InitialProvider>
+                     <Content/>
+                  </InitialProvider>
+               </ToastProvider>
+             
             </AllProvider>
          </main>
       </>

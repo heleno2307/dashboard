@@ -16,19 +16,16 @@ export default async function  handler(
 ) {
   const { user } = req.query;
   const dateIni = req.body.dateIni;
-  const admin:boolean = req.body.admin
-  const dateFim =  req.body.dateFim;
-  const seller = req.body.seller
-
+  const dateFim = req.body.dateFim;
+  if(!user || !dateIni || !dateFim) return  res.status(401).json({error: 'Há um ou mais parâmetros faltando'})
   const controller = new Controller(user)
-  const data = await controller.getInitial(dateIni,dateFim,admin,seller);
-  
+  const data = await controller.getSellersMonth(dateIni,dateFim);
+
   if(data == 402){
-    return res.status(402).json({error: 'erro ao consultar no banco de dados'})
-  }else if(data == 401){
-    return res.status(401).json({error:'Erro, algum parâmetro em branco'});
-  }else{
+    return res.status(402).json({error: 'Erro ao consultar no banco de dados'})
+ }else{
     return res.status(200).json(data);
   }
+  
   
 }

@@ -22,3 +22,23 @@
       color: #FF7300;
    }
 }
+.iconsChartDiv{
+   display: flex;
+   gap: 1rem;
+   margin-top: 1rem;
+   align-items: center;
+   justify-content: center;
+}
+
+.iconsChart{
+   font-size: 25px;
+   transition: all 0.5s;
+   cursor: pointer;
+   &:hover{
+      color: #FF7300; 
+   }
+}
+
+.active {
+   color: #FF7300;
+ }

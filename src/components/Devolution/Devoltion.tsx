@@ -19,8 +19,11 @@ type CurrentDevolution = {
    C5_VEND1:string;
    A3_NOME:string
 }
+interface Props{
+   seller?:string
+}
 
-const Devolution = ()=>{
+const Devolution = ({seller}:Props)=>{
    const {user} = useUserContext();
    const [devolution,setDevolution] = useState<CurrentDevolution[] | null>(null)
    const [date, setDate] = useState<string>(getDate());
@@ -32,7 +35,7 @@ const Devolution = ()=>{
    const fetchData = useCallback(async () => {
       if (!user) return;
       try {
-         const data = await getDevolution(user.code, replaceDate(getDate()),all);
+         const data = await getDevolution(user.code, replaceDate(getDate()),all,seller);
          if (Array.isArray(data)) {
             setDevolution(data);
          }
@@ -55,7 +58,7 @@ const Devolution = ()=>{
             setDevolution([])
          }
       }
-   }, [user,all,showToast]);
+   }, [user,all,showToast,seller]);
    
    useEffect(()=>{
       fetchData();
@@ -70,7 +73,7 @@ const Devolution = ()=>{
    
       try {
          setDevolution(null);
-         const data = await getDevolution(user.code, dateFim,all);
+         const data = await getDevolution(user.code, dateFim,all,seller);
    
          if (Array.isArray(data)) {
             setDevolution(data);

@@ -1,12 +1,13 @@
 import axios, { AxiosError } from "axios";
 
 
-const getInitial = async (user:string,dateIni:string,dateFim:string,admin:boolean=false) => {
+const getInitial = async (user:string,dateIni:string,dateFim:string,admin:boolean=false,seller:string='') => {
   try {
     const response = await axios.post(`/api/initial/${user}`,{
       dateIni,
       dateFim,
-      admin
+      admin,
+      seller
     });
     return response.data;
   }catch (e: unknown) {

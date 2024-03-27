@@ -6,3 +6,20 @@
    display: flex;
    flex-direction: column;
 }
+.header{
+   position: relative;
+   display: flex;
+   gap: 25px;
+   align-items: center;
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+.icon{
+   font-size: 30px;
+   cursor: pointer;
+   &:hover{
+      animation: spin 1s linear;
+   }
+}

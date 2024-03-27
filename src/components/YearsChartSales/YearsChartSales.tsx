@@ -6,6 +6,9 @@ import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
 import { useSellerContext } from "@/context/sellerContext";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { FiBarChart } from "react-icons/fi";
+import { TbMath1Divide2 } from "react-icons/tb";
+import { MdShowChart } from "react-icons/md";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -32,6 +35,8 @@ export default function YearsChatSales() {
   const [sd2, setSd2] = useState<number[]>([]);
   const [sd1, setSd1] = useState<number[]>([]);
   const [meses, setMeses] = useState<string[]>([]);
+  const [avarage,setAvarage] = useState(false)
+  const [charType,setChartType] = useState<'bar' | 'line'>('bar');
   const [year,setYear] = useState(new Date().getFullYear())
   const [loading,setLoading] = useState(false);
   const { user } = useUserContext();
@@ -52,7 +57,7 @@ export default function YearsChatSales() {
 
     dataMes.SD2.forEach((item: SD2) => {
       const index = dataMes.months.indexOf(`${item.mes} ${item.ano}`);
-      console.log(`${item.mes} ${item.ano}`,index,dataMes.months.length)
+
       if(index !== -1){
         sd2Data[index] = parseInt(item.total.toString());
       }
@@ -70,15 +75,52 @@ export default function YearsChatSales() {
     setSd1(sd1Data);
     setMeses(dataMes.months);
     setLoading(false)
+    setAvarage(false)
   }, [user,seller,year]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+
+  const hendlerClickAlterTypeChart = ()=>{
+      if(charType == 'bar'){
+        setChartType('line')
+      }else{
+        setChartType('bar')
+      }
+  }
+  const hendlerClickAvarage = ()=>{
+    if(!avarage){
+      setSd2((current)=>{
+        return current.map((el)=>{
+          return el / 20
+        })
+      })
+      setSd1((current)=>{
+        return current.map((el)=>{
+          return el / 20
+        })
+      })
+      setAvarage(true)
+    }else{
+      setSd2((current)=>{
+        return current.map((el)=>{
+          return el * 20
+        })
+      })
+      setSd1((current)=>{
+        return current.map((el)=>{
+          return el * 20
+        })
+      })
+      setAvarage(false)
+    }
+    
+  }
   const options: ApexOptions = {
     chart: {
-      id: "basic-bar",
+      id: "basic"
     },
     dataLabels:{
       enabled:false
@@ -96,7 +138,7 @@ export default function YearsChatSales() {
         },
       },
     },
-    colors: ["#34ee43", "#db4444"],
+    colors: ["#5fee34", "#db7b44"],
     responsive: [
       {
          breakpoint: 1200,
@@ -118,6 +160,7 @@ export default function YearsChatSales() {
     
     
   };
+ 
 
   const series = [
     {
@@ -148,15 +191,42 @@ export default function YearsChatSales() {
           }
         }}/>
       </div>
-      {typeof window !== "undefined" && (
-        <Chart
-          options={options}
-          series={series}
-          type="bar"
-          width={"1000"}
-          height={"400px"}
-        />
-      )}
+      <div className={styles.iconsChartDiv}>
+          <FiBarChart 
+            className={`${styles.iconsChart} ${charType == 'bar'? styles.active :null}`}
+            onClick={hendlerClickAlterTypeChart}
+          />
+          <MdShowChart 
+            className={`${styles.iconsChart} ${charType == 'line'? styles.active :null}`}
+            onClick={hendlerClickAlterTypeChart}
+          />
+          <TbMath1Divide2 
+            className={`${styles.iconsChart} ${avarage? styles.active :null}`}
+            onClick={hendlerClickAvarage}
+          />
+      </div>
+      {
+         charType == 'bar' &&(
+            <Chart
+              options={options}
+              series={series}
+              type="bar"
+              width={"1000"}
+              height={"400px"}
+            />
+         )
+      }
+      {
+         charType == 'line' &&(
+            <Chart
+              options={options}
+              series={series}
+              type="line"
+              width={"1000"}
+              height={"400px"}
+            />
+         )
+      }
     </section>
   );
 }

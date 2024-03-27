@@ -890,7 +890,7 @@ export default class Model {
             GROUP BY
                D2_EMISSAO
             ORDER BY
-               D2_EMISSAO
+               D2_EMISSAO;
                
          `)
          return result.recordset;

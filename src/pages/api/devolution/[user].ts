@@ -17,9 +17,10 @@ export default async function  handler(
   const { user } = req.query;
   const date = req.body.date;
   const admin = req.body.admin;
+  const seller = req.body.seller
 
   const controller = new Controller(user)
-  const data = await controller.getCurrentDevolution(date,admin);
+  const data = await controller.getCurrentDevolution(date,admin,seller);
   
   if(data == 402){
     return res.status(402).json({error: 'Erro ao consultar no banco de dados'})

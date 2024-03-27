@@ -1,10 +1,11 @@
 import axios, { AxiosError } from "axios";
 
-const getDevolution = async (user:string,date:string,admin:boolean) => {
+const getDevolution = async (user:string,date:string,admin:boolean,seller:string='') => {
   try {
     const response = await axios.post(`/api/devolution/${user}`,{
-      date:date,
-      admin
+      date,
+      admin,
+      seller
     });
     return response.data;
   }catch (e: unknown) {
