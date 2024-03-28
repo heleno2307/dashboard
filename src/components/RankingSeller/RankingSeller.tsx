@@ -6,7 +6,7 @@ import getSellerMonthSales from "@/routes/getSellerMonthSales";
 import { useUserContext } from "@/context/userContext";
 import capitalizeNames from "@/utilities/capitalizeNames";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { TbMath1Divide2 } from "react-icons/tb";
+import { RiBarChartLine } from "react-icons/ri";
 
 
 interface SD{
@@ -173,9 +173,10 @@ function RankingSeller() {
             <IoIosArrowForward className={styles.icon} onClick={hendlerPlusDate}/>
          </div>
          <div className={styles.iconsChartDiv}>
-            <TbMath1Divide2 
+            <RiBarChartLine 
                className={`${styles.iconsChart} ${avarage? styles.active :null}`}
                onClick={hendlerClickAvarage}
+               title='Fazer Média diária'
             />
          </div>
          <Chart 

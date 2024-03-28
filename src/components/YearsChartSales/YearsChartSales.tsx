@@ -7,8 +7,8 @@ import { ApexOptions } from "apexcharts";
 import { useSellerContext } from "@/context/sellerContext";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FiBarChart } from "react-icons/fi";
-import { TbMath1Divide2 } from "react-icons/tb";
 import { MdShowChart } from "react-icons/md";
+import { RiBarChartLine } from "react-icons/ri";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -195,14 +195,17 @@ export default function YearsChatSales() {
           <FiBarChart 
             className={`${styles.iconsChart} ${charType == 'bar'? styles.active :null}`}
             onClick={hendlerClickAlterTypeChart}
+            title='Gráfico de Barras'
           />
           <MdShowChart 
             className={`${styles.iconsChart} ${charType == 'line'? styles.active :null}`}
             onClick={hendlerClickAlterTypeChart}
+            title='Gráfico de Linha'
           />
-          <TbMath1Divide2 
+          <RiBarChartLine 
             className={`${styles.iconsChart} ${avarage? styles.active :null}`}
             onClick={hendlerClickAvarage}
+            title='Fazer Média diária'
           />
       </div>
       {
