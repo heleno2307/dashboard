@@ -538,13 +538,14 @@ export default class Model {
    //RETORNA LISTA DE CLIENTES
    async getClients(sellerCod:string = '',dateIni:string,sellerCod1:string = sellerCod,pageSize:number,page:number){
       try{
+         const checkPage = page !=0? page: 1
          const pool = await new ConnectionPool(config).connect();
          const result = await pool.request()
          .input('VENDEDOR',VarChar, sellerCod)
          .input('VENDEDOR1',VarChar, sellerCod1)
          .input('DATEINI',VarChar,dateIni)
          .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
+         .input('pageNumber',Int,checkPage)
          .query(`
             USE TMPRD;
 
