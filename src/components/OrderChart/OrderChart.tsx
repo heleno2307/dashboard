@@ -6,6 +6,7 @@ import getCountOrder from '@/routes/getCountOrder';
 import { useUserContext } from '@/context/userContext';
 import { useSellerContext } from '@/context/sellerContext';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { useToast } from '@/context/toastContext';
 const Chart = dynamic(() => import("react-apexcharts"), {
    ssr: false,
 });
@@ -21,6 +22,7 @@ export default function OrderChart(){
    const [loading,setLoading] = useState(true);
    const {user} = useUserContext()
    const {seller} = useSellerContext()
+   const {showToast} = useToast()
 
    const dataFecth = useCallback(async()=>{
       if(!user || !seller || typeof window === 'undefined') return
@@ -35,16 +37,31 @@ export default function OrderChart(){
          setOrder([data.total_order,data.total_deleted]);
          setLoading(true);
       } catch (error) {
-         console.log(error)
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+            setOrder([])
+          } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setOrder([])
+          } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setOrder([])
+          } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setOrder([])
+          } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setOrder([])
+          }
       }
-   },[seller,user,month,year]);
+   },[seller,user,month,year,showToast]);
 
    useEffect(()=>{
       dataFecth()
    },[dataFecth])
 
    const hendlerPlusDate = ()=>{
-     if(loading){
+     if(loading && order.length != 0){
          setLoading(false)
          if(month == 12){
             setMonth(1);
@@ -55,7 +72,7 @@ export default function OrderChart(){
      }
    }
    const hendlerMinusDate = ()=>{
-      if(loading){
+      if(loading && order.length != 0){
          setLoading(false);
          if(month == 1){
             setMonth(12);

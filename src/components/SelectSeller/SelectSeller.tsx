@@ -3,6 +3,7 @@ import styles from "./SelectSeller.module.scss";
 import getSeller from "@/routes/getSeller";
 import { useUserContext } from "@/context/userContext";
 import { useSellerContext } from "@/context/sellerContext";
+import { useToast } from "@/context/toastContext";
 
 interface SA3{
    A3_COD:string
@@ -14,14 +15,34 @@ export default function SelectSeller() {
   const [selectedOption, setSelectedOption] = useState<string>('');
   const {user} = useUserContext()
   const {handlerSeller,seller} = useSellerContext()
+  const {showToast} = useToast()
 
   const dataFetch = useCallback(async () => {
     if (!user) return;
-    const data = await getSeller(user.code);
-    if (Array.isArray(data)) {
-      setOption(data);
+    try {
+      const data = await getSeller(user.code);
+      if (Array.isArray(data)) {
+        setOption(data);
+      }
+    } catch (error) {
+      if (error === 404) {
+        showToast('erro', 'Error 02, contactar administrador', 4000);
+        setOption([])
+      } else if (error === 500) {
+        showToast('erro', 'Error 03, contactar administrador', 4000);
+        setOption([])
+      } else if (error === 401) {
+        showToast('erro', 'Error 04, contactar administrador', 4000);
+        setOption([])
+      } else if (error === 402) {
+        showToast('erro', 'Error 01, contactar administrador', 4000);
+        setOption([])
+      } else {
+        showToast('erro', 'Error 05, contactar administrador', 4000);
+        setOption([])
+      }
     }
-  }, [user]);
+  }, [user,showToast]);
 
   useEffect(() => {
     dataFetch();

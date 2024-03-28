@@ -7,6 +7,7 @@ import { useUserContext } from "@/context/userContext";
 import capitalizeNames from "@/utilities/capitalizeNames";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiBarChartLine } from "react-icons/ri";
+import { useToast } from "@/context/toastContext";
 
 
 interface SD{
@@ -35,7 +36,7 @@ function RankingSeller() {
    const [loading,setLoading] = useState(true);
 
    const {user} = useUserContext()
-
+   const {showToast} = useToast()
    const dataFetch = useCallback(async()=>{
       if(!user)return
       try {
@@ -66,12 +67,36 @@ function RankingSeller() {
          }));
          setLoading(true);
       } catch (error) {
-         
+         if (error === 404) {
+            showToast('erro', 'Error 02, contactar administrador', 4000);
+            setSd1([])
+            setSd2([])
+            setSellers([]);
+          } else if (error === 500) {
+            showToast('erro', 'Error 03, contactar administrador', 4000);
+            setSd1([])
+            setSd2([])
+            setSellers([]);
+          } else if (error === 401) {
+            showToast('erro', 'Error 04, contactar administrador', 4000);
+            setSd1([])
+            setSd2([])
+            setSellers([]);
+          } else if (error === 402) {
+            showToast('erro', 'Error 01, contactar administrador', 4000);
+            setSd1([])
+            setSd2([])
+            setSellers([]);
+          } else {
+            showToast('erro', 'Error 05, contactar administrador', 4000);
+            setSd1([])
+            setSd2([])
+            setSellers([]);
+          }
       }
-   },[user,month,year])
+   },[user,month,year,showToast])
 
    useEffect(()=>{
-      console.log("renderizou")
       dataFetch()
    },[dataFetch])
 
@@ -81,8 +106,12 @@ function RankingSeller() {
          if(month == 12){
             setMonth(1);
             setYear((current)=> current +1 )
+            setSd1([])
+            setSd2([])
          }else{
             setMonth((curent)=> curent + 1)
+            setSd1([])
+            setSd2([])
          }
      }
    }
