@@ -59,7 +59,7 @@ export default function YearsChatSales() {
       const index = dataMes.months.indexOf(`${item.mes} ${item.ano}`);
 
       if(index !== -1){
-        sd2Data[index] = parseInt(item.total.toString());
+        sd2Data[index] = parseFloat(item.total.toString());
       }
       
     });
@@ -67,7 +67,7 @@ export default function YearsChatSales() {
     dataMes.SD1.forEach((item: SD1) => {
       const index = dataMes.months.indexOf(`${item.mes} ${item.ano}`);
       if(index !== -1){
-        sd1Data[index] = parseInt(item.total.toString());
+        sd1Data[index] = parseFloat(item.total.toString());
       }
     });
 

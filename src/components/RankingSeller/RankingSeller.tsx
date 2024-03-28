@@ -45,24 +45,25 @@ function RankingSeller() {
             `${year}${formatedMonth}01`,
             `${year}${formatedMonth}31`
          );
-         setSellers(()=>{
-            return data.SD2.map((el)=>{
-               const partesNome = el.nome.split(' ')
-               const nome = `${partesNome[0]} ${partesNome[partesNome.length - 1]}`
-               
-               return capitalizeNames(nome)
-            })
+         const formattedSellers = data.SD2.map((el) => {
+            const partesNome = el.nome.split(' ')
+            const nome = `${partesNome[0]} ${partesNome[partesNome.length - 1]}`
+            return capitalizeNames(nome)
          });
+         setSellers(formattedSellers);
          setSd2(()=>{
             return data.SD2.map((el)=>{
-               return parseInt(el.total.toString())
+               return parseFloat(el.total.toString())
             })
          })
-         setSd1(()=>{
-            return data.SD1.map((el)=>{
-               return parseInt(el.total.toString())
-            })
-         })
+         setSd1(formattedSellers.map((seller) => {
+            const sd1Data = data.SD1.find((el) => {
+               const partesNome = el.nome.split(' ');
+               const nome = `${partesNome[0]} ${partesNome[partesNome.length - 1]}`;
+               return capitalizeNames(nome) === seller;
+            });
+            return sd1Data ? parseFloat(sd1Data.total.toString()) : 0;
+         }));
          setLoading(true);
       } catch (error) {
          
@@ -70,6 +71,7 @@ function RankingSeller() {
    },[user,month,year])
 
    useEffect(()=>{
+      console.log("renderizou")
       dataFetch()
    },[dataFetch])
 
