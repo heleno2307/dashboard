@@ -924,7 +924,7 @@ export default class Controller {
     if (admin) {
       try {
         devolutions = await model.getSD1("", "99999", dateIni, dateFim);
-        sales = await model.getSD2("", "999999", dateIni, dateFim);
+        sales = await model.getSD2("", "999999", dateIni, dateFim,false);
       } catch (error) {
         return 402;
       }
@@ -932,7 +932,7 @@ export default class Controller {
       try {
         const userCod = seller != "" ? seller : await this.getSellerCod();
         devolutions = await model.getSD1(userCod, userCod, dateIni, dateFim);
-        sales = await model.getSD2(userCod, userCod, dateIni, dateFim);
+        sales = await model.getSD2(userCod, userCod, dateIni, dateFim,false);
       } catch (error) {
         console.log("error");
         return 402;
@@ -1022,7 +1022,7 @@ export default class Controller {
 
   async getYearsSales(sellerInit: string, dateIni: string, dateFim: string) {
     try {
-      const sd2 = await model.getSD2(sellerInit, sellerInit, dateIni, dateFim);
+      const sd2 = await model.getSD2(sellerInit, sellerInit, dateIni, dateFim,false);
       const sd1 = await model.getSD1(sellerInit, sellerInit, dateIni, dateFim);
       const primeiraData = parseISO(dateIni);
       const segundaData = parseISO(dateFim);
@@ -1150,7 +1150,7 @@ export default class Controller {
   }
   async getSellersMonth(dateIni: string, dateFim: string) {
     try {
-      const dataSd2 = await model.getSD2("", "999999", dateIni, dateFim);
+      const dataSd2 = await model.getSD2("", "999999", dateIni, dateFim,true);
       const monthNames: any = {
         1: "Janeiro",
         2: "Fevereiro",

@@ -70,7 +70,7 @@ export default function OrderChart(){
       chart:{
          id: 'donut-chart'
       },
-      colors: ["#5277f1", "#eb0000"],
+      colors: ["#0191CE", "#F37020"],
       labels:['Pedidos N/Excluídos','Pedidos Excluídos'],
       dataLabels: {
          enabled: true,
@@ -97,10 +97,10 @@ export default function OrderChart(){
       <div className={styles.content}>
          <h3>Percentual de pedidos Excluídos</h3>
          <div className={styles.years}>
-        <IoIosArrowBack className={styles.icon} onClick={hendlerMinusDate}/>
-        {`${month} - ${year}`}
-        <IoIosArrowForward className={styles.icon} onClick={hendlerPlusDate}/>
-      </div>
+            <IoIosArrowBack className={styles.icon} onClick={hendlerMinusDate}/>
+            {`${month} - ${year}`}
+            <IoIosArrowForward className={styles.icon} onClick={hendlerPlusDate}/>
+         </div>
          <div className={styles.chart}>
             {
                typeof window !== 'undefined' &&(

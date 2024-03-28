@@ -53,8 +53,9 @@ export default function AdminContents(){
                
                
                <SellerContextProvider>
-                  <DayInfoSeller/>
+                  <RankingSeller/>
                   <SelectSeller/>
+                  <DayInfoSeller/>
                   <YearsChatSales/>
                   <OrderChart/>
                </SellerContextProvider>

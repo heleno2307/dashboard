@@ -1,16 +1,19 @@
-.sectionContent{
-   margin-top: 2rem;
+.contentChart{
    display: flex;
    flex-direction: column;
-   justify-content: center;
    align-items: center;
-   width: 100%;
+   justify-content: center;
+   margin-top: 4rem;
+   gap: 2rem;
 }
-
+.chart{
+   display: flex;
+   margin-top: 3rem;
+   margin-left: 9rem;
+}
 .years{
    display: flex;
    gap: 5px;
-   margin-top: 1.5rem;
    align-items: center;
 
 }
@@ -25,7 +28,6 @@
 .iconsChartDiv{
    display: flex;
    gap: 1rem;
-   margin-top: 1rem;
    align-items: center;
    justify-content: center;
 }
@@ -38,7 +40,6 @@
       color: #FF7300; 
    }
 }
-
 .active {
    color: #FF7300;
 }

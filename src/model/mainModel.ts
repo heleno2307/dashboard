@@ -852,7 +852,7 @@ export default class Model {
       }
    }
    //RETORNA DADOS DE
-   async getSD2(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string){
+   async getSD2(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,groupSeller:boolean){
       try{
          const pool = await new ConnectionPool(config).connect();
          const result = await pool.request()
@@ -870,6 +870,7 @@ export default class Model {
                SUM(D2_TOTAL) D2_TOTAL,
                SUM(D2_CUSTO1) D2_CUSTO1,
                CAST(D2_EMISSAO AS DATE) AS D2_EMISSAO
+               ${groupSeller ? ",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME": ""}
             FROM
                SF2010 (NOLOCK)
                INNER JOIN SD2010 (NOLOCK)
@@ -889,6 +890,7 @@ export default class Model {
                AND F2_TIPO = 'N'
             GROUP BY
                D2_EMISSAO
+               ${groupSeller ? ", F2_VEND1":""}
             ORDER BY
                D2_EMISSAO;
                

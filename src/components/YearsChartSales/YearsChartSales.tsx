@@ -138,7 +138,7 @@ export default function YearsChatSales() {
         },
       },
     },
-    colors: ["#5fee34", "#db7b44"],
+    colors: ["#0191CE", "#F37020"],
     responsive: [
       {
          breakpoint: 1200,
