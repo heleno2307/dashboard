@@ -796,7 +796,7 @@ export default class Model {
    }
 
    //RETORNA DADOS DE DEVOLUCAO
-   async getSD1(sellerCodIni:string,sellerCodFim:string,dateIni:string,dateFim:string){
+   async getSD1(sellerCodIni:string,sellerCodFim:string,dateIni:string,dateFim:string,groupSeller:boolean=false){
       try{
          const pool = await new ConnectionPool(config).connect();
          const result = await pool.request()
@@ -814,7 +814,7 @@ export default class Model {
             SELECT
                CAST(D1_DTDIGIT AS DATE) AS 'D1_DTDIGIT',
                SUM(D1_TOTAL) AS 'D1_TOTAL'
-            
+               ${groupSeller ?",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME":""}
             FROM
                SD1010 (NOLOCK)
             
@@ -843,7 +843,9 @@ export default class Model {
                AND F2_VEND1 BETWEEN @VENDEDOR AND @VENDEDOR1
             
             GROUP BY
-               D1_DTDIGIT;
+               D1_DTDIGIT
+               ${groupSeller?", F2_VEND1":""}
+            ;
          `)
          return result.recordset;
       }catch(err:any){

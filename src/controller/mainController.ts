@@ -923,7 +923,7 @@ export default class Controller {
 
     if (admin) {
       try {
-        devolutions = await model.getSD1("", "99999", dateIni, dateFim);
+        devolutions = await model.getSD1("", "99999", dateIni, dateFim,false);
         sales = await model.getSD2("", "999999", dateIni, dateFim,false);
       } catch (error) {
         return 402;
@@ -931,7 +931,7 @@ export default class Controller {
     } else {
       try {
         const userCod = seller != "" ? seller : await this.getSellerCod();
-        devolutions = await model.getSD1(userCod, userCod, dateIni, dateFim);
+        devolutions = await model.getSD1(userCod, userCod, dateIni, dateFim,false);
         sales = await model.getSD2(userCod, userCod, dateIni, dateFim,false);
       } catch (error) {
         console.log("error");
@@ -1023,7 +1023,7 @@ export default class Controller {
   async getYearsSales(sellerInit: string, dateIni: string, dateFim: string) {
     try {
       const sd2 = await model.getSD2(sellerInit, sellerInit, dateIni, dateFim,false);
-      const sd1 = await model.getSD1(sellerInit, sellerInit, dateIni, dateFim);
+      const sd1 = await model.getSD1(sellerInit, sellerInit, dateIni, dateFim,false);
       const primeiraData = parseISO(dateIni);
       const segundaData = parseISO(dateFim);
       const dateDiff =
@@ -1151,6 +1151,7 @@ export default class Controller {
   async getSellersMonth(dateIni: string, dateFim: string) {
     try {
       const dataSd2 = await model.getSD2("", "999999", dateIni, dateFim,true);
+      const dataSd1 = await model.getSD1("", "999999", dateIni, dateFim,true);
       const monthNames: any = {
         1: "Janeiro",
         2: "Fevereiro",
@@ -1166,7 +1167,7 @@ export default class Controller {
         12: "Dezembro",
       };
       const SomaPorMesPorNome = <
-        T extends { D2_TOTAL: number; D2_EMISSAO: string; A3_NOME: string }
+        T extends { D2_TOTAL: number; D2_EMISSAO: string; A3_NOME: string ; D1_DTDIGIT:string,D1_TOTAL: number}
       >(
         arry: T[]
       ): { nome: string; ano: string; mes: string; total: number }[] => {
@@ -1183,11 +1184,11 @@ export default class Controller {
         } = {};
 
         arry.forEach((item) => {
-          const dataEmissao = new Date(item.D2_EMISSAO);
+          const dataEmissao = new Date(item.D2_EMISSAO?item.D2_EMISSAO:item.D1_DTDIGIT);
           const mes = dataEmissao.getUTCMonth() + 1;
           const ano = dataEmissao.getUTCFullYear();
           const nomeMes = monthNames[mes];
-          const total = item.D2_TOTAL || 0;
+          const total = item.D2_TOTAL?item.D2_TOTAL:item.D1_TOTAL
 
           // Se o nome ainda não foi inicializado, inicialize-o com um objeto vazio
           if (!somaPorNome[item.A3_NOME.trim()]) {
@@ -1225,7 +1226,10 @@ export default class Controller {
         return resultArray;
       };
 
-      return SomaPorMesPorNome(dataSd2);
+      return {
+        SD2: SomaPorMesPorNome(dataSd2),
+        SD1: SomaPorMesPorNome(dataSd1)
+      };
     } catch (error) {
       return 402;
     }

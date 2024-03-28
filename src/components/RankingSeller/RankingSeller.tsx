@@ -8,19 +8,27 @@ import capitalizeNames from "@/utilities/capitalizeNames";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { TbMath1Divide2 } from "react-icons/tb";
 
-interface DataFetch{
+
+interface SD{
    nome:string,
    ano:string,
    mes:string,
    total:number
 }
+interface DataFetch{
+   SD1: SD[],
+   SD2: SD[]
+}
+
+
 const Chart = dynamic(() => import("react-apexcharts"), {
    ssr: false,
 });
  
 function RankingSeller() {
    const [sellers,setSellers] = useState<string[]>([])
-   const [sd2,setSd2] = useState<number[]>([]);
+   const [sd2,setSd2] = useState<number[]>([])
+   const [sd1,setSd1] = useState<number[]>([]);
    const [month,setMonth] = useState<number>(new Date().getMonth() + 1 )
    const [year,setYear] = useState<number>(new Date().getFullYear());
    const [avarage,setAvarage] = useState(false)
@@ -32,13 +40,13 @@ function RankingSeller() {
       if(!user)return
       try {
          const formatedMonth = month <= 9?`0${month}`:month
-         const data:DataFetch[] = await getSellerMonthSales(
+         const data:DataFetch = await getSellerMonthSales(
             user.code,
             `${year}${formatedMonth}01`,
             `${year}${formatedMonth}31`
          );
          setSellers(()=>{
-            return data.map((el)=>{
+            return data.SD2.map((el)=>{
                const partesNome = el.nome.split(' ')
                const nome = `${partesNome[0]} ${partesNome[partesNome.length - 1]}`
                
@@ -46,7 +54,12 @@ function RankingSeller() {
             })
          });
          setSd2(()=>{
-            return data.map((el)=>{
+            return data.SD2.map((el)=>{
+               return parseInt(el.total.toString())
+            })
+         })
+         setSd1(()=>{
+            return data.SD1.map((el)=>{
                return parseInt(el.total.toString())
             })
          })
@@ -145,6 +158,10 @@ function RankingSeller() {
       {
         name: "Vendas",
         data: sd2,
+      },
+      {
+         name: "Devoluções",
+         data: sd1,
       },
    ];
    return ( 
