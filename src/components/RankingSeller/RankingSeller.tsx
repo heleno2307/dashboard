@@ -133,6 +133,11 @@ function RankingSeller() {
             return el / 20
           })
         })
+        setSd1((current)=>{
+         return current.map((el)=>{
+           return el / 20
+         })
+       })
         setAvarage(true)
       }else{
         setSd2((current)=>{
@@ -140,6 +145,11 @@ function RankingSeller() {
             return el * 20
           })
         })
+        setSd1((current)=>{
+         return current.map((el)=>{
+           return el * 20
+         })
+       })
         setAvarage(false)
       }
    }
