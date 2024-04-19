@@ -2,10 +2,7 @@ import Login from '@/components/Login/Login'
 import { ToastProvider } from '@/context/toastContext'
 import Head from 'next/head'
 
-
-
 export default function Home() {
- 
   return (
     <>
       <Head>
@@ -15,10 +12,8 @@ export default function Home() {
         <link rel="icon" href="favIcon.ico" />
       </Head>
       <ToastProvider>
-        <Login/>
+        <Login />
       </ToastProvider>
-      
     </>
   )
 }
-

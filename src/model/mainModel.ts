@@ -1,29 +1,29 @@
-import sql, {ConnectionPool, Int, VarChar } from 'mssql'
-import dotenv from "dotenv";
+import sql, { ConnectionPool, Int, VarChar } from 'mssql'
+import dotenv from 'dotenv'
 
-dotenv.config();
- 
-const config: sql.config  = {
-   user: process.env.DB_USER,
-   password : process.env.DB_PASSWORD,
-   server : process.env.DB_IP?process.env.DB_IP:'123',
-   database : process.env.DB_NAME,
-   options : {
-      encrypt: true,
-      trustServerCertificate: true
-   },
-   requestTimeout:200000
+dotenv.config()
+
+const config: sql.config = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_IP ? process.env.DB_IP : '123',
+  database: process.env.DB_NAME,
+  options: {
+    encrypt: true,
+    trustServerCertificate: true,
+  },
+  requestTimeout: 200000,
 }
 
 export default class Model {
-   constructor(){
-   }
+  constructor() {}
 
-   //RETORNA O USUARIO
-   async getName(loginUser:string):Promise<sql.IRecordSet<any>>{
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request().input('login',VarChar, loginUser).query(`
+  // RETORNA O USUARIO
+  async getName(loginUser: string): Promise<sql.IRecordSet<any>> {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool.request().input('login', VarChar, loginUser)
+        .query(`
          USE TMPRD;
             SELECT
                USR_CODIGO,
@@ -35,25 +35,32 @@ export default class Model {
                USR_ID = @login OR USR_CODIGO= @login
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   //RETORNA PEDIDO DE VENDAS
-   async getSales(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,pageSize:number,page:number){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
-         .query(`
+  // RETORNA PEDIDO DE VENDAS
+  async getSales(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    pageSize: number,
+    page: number,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, page).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -86,23 +93,31 @@ export default class Model {
             FETCH NEXT @pageSize ROWS ONLY;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getSalesNf(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,pageSize:number,page:number){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSalesNf(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    pageSize: number,
+    page: number,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, page).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -136,21 +151,27 @@ export default class Model {
             FETCH NEXT @pageSize ROWS ONLY;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getCountSalesNf(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getCountSalesNf(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -168,23 +189,31 @@ export default class Model {
                AND C5_NOTA != ''
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getSalesAdd(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,pageSize:number,page:number){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSalesAdd(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    pageSize: number,
+    page: number,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, page).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -218,21 +247,27 @@ export default class Model {
             FETCH NEXT @pageSize ROWS ONLY;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getCountSalesAdd(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getCountSalesAdd(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -250,24 +285,33 @@ export default class Model {
                AND C5_ZSTSOSS IN ('ADD','ALT')
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getSalesFilter(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,pageSize:number,page:number,filter:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('FILTER',VarChar,filter)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSalesFilter(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    pageSize: number,
+    page: number,
+    filter: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('FILTER', VarChar, filter)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, page).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -302,22 +346,27 @@ export default class Model {
             FETCH NEXT @pageSize ROWS ONLY;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   async getCountSales(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+  async getCountSales(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -334,22 +383,29 @@ export default class Model {
                AND C5_CLIENTE + C5_LOJACLI NOT IN (SELECT #FILIAIS.A1_CLIENTE FROM #FILIAIS(NOLOCK))
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getCountSalesFilter(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,filter:string){   
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('FILTER',VarChar,filter)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getCountSalesFilter(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    filter: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('FILTER', VarChar, filter).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -368,25 +424,33 @@ export default class Model {
                AND C5_NOTA = ''
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   async getSalesInput(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,pageSize:number,page:number,value:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,page)
-         .input('VALUES',VarChar,`%${value}%`)
-         .query(`
+  async getSalesInput(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    pageSize: number,
+    page: number,
+    value: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, page)
+        .input('VALUES', VarChar, `%${value}%`).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -420,22 +484,29 @@ export default class Model {
             FETCH NEXT @pageSize ROWS ONLY;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getCountSalesInput(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,value:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .input('VALUES',VarChar,`%${value}%`)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getCountSalesInput(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    value: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim)
+        .input('VALUES', VarChar, `%${value}%`).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -452,21 +523,26 @@ export default class Model {
                AND C5_CLIENTE + C5_LOJACLI NOT IN (SELECT #FILIAIS.A1_CLIENTE FROM #FILIAIS(NOLOCK))
                AND (C5_NOMECLI LIKE @VALUES OR C5_NOTA LIKE @VALUES OR C5_FILIAL LIKE @VALUES OR C5_NUM LIKE @VALUES OR C5_CLIENTE LIKE @VALUES)         
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   //RETORNA DEVOLUCAO DETALHADA
-   async getDevolutionDatails(loginUser:string,loginUser1:string,date:string):Promise<sql.IRecordSet<any>>{
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, loginUser)
-         .input('VENDEDOR1',VarChar, loginUser1)
-         .input('ENTRADA',VarChar,date)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  // RETORNA DEVOLUCAO DETALHADA
+  async getDevolutionDatails(
+    loginUser: string,
+    loginUser1: string,
+    date: string,
+  ): Promise<sql.IRecordSet<any>> {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, loginUser)
+        .input('VENDEDOR1', VarChar, loginUser1)
+        .input('ENTRADA', VarChar, date).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -528,25 +604,31 @@ export default class Model {
                D2_EMISSAO;
                   
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   //RETORNA LISTA DE CLIENTES
-   async getClients(sellerCod:string = '',dateIni:string,sellerCod1:string = sellerCod,pageSize:number,page:number){
-      try{
-         const checkPage = page !=0? page: 1
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCod)
-         .input('VENDEDOR1',VarChar, sellerCod1)
-         .input('DATEINI',VarChar,dateIni)
-         .input('pageSize',Int,pageSize)
-         .input('pageNumber',Int,checkPage)
-         .query(`
+  // RETORNA LISTA DE CLIENTES
+  async getClients(
+    sellerCod: string = '',
+    dateIni: string,
+    sellerCod1: string = sellerCod,
+    pageSize: number,
+    page: number,
+  ) {
+    try {
+      const checkPage = page != 0 ? page : 1
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCod)
+        .input('VENDEDOR1', VarChar, sellerCod1)
+        .input('DATEINI', VarChar, dateIni)
+        .input('pageSize', Int, pageSize)
+        .input('pageNumber', Int, checkPage).query(`
             USE TMPRD;
 
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
@@ -590,21 +672,25 @@ export default class Model {
             OFFSET @pageSize * (@pageNumber - 1) ROWS
             FETCH NEXT @pageSize ROWS ONLY;
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   async getCountClients(sellerCod:string = '',dateIni:string,sellerCod1:string = sellerCod){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCod)
-         .input('VENDEDOR1',VarChar, sellerCod1)
-         .input('DATEINI',VarChar,dateIni)
-         .query(`
+  async getCountClients(
+    sellerCod: string = '',
+    dateIni: string,
+    sellerCod1: string = sellerCod,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCod)
+        .input('VENDEDOR1', VarChar, sellerCod1)
+        .input('DATEINI', VarChar, dateIni).query(`
             USE TMPRD;
 
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
@@ -640,24 +726,31 @@ export default class Model {
 
             SELECT COUNT(*) AS 'CONT' FROM #REGISTER
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   
-   async getClientsFilter(sellerCod:string = '',dateIni:string,sellerCod1:string = sellerCod,pageSize:number,page:number,filter:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCod)
-         .input('VENDEDOR1',VarChar, sellerCod1)
-         .input('DATEINI',VarChar,dateIni)
-         .input('pageSize',Int,pageSize)
-         .input('FILTER',VarChar,`%${filter}%`)
-         .input('pageNumber',Int,page)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getClientsFilter(
+    sellerCod: string = '',
+    dateIni: string,
+    sellerCod1: string = sellerCod,
+    pageSize: number,
+    page: number,
+    filter: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCod)
+        .input('VENDEDOR1', VarChar, sellerCod1)
+        .input('DATEINI', VarChar, dateIni)
+        .input('pageSize', Int, pageSize)
+        .input('FILTER', VarChar, `%${filter}%`)
+        .input('pageNumber', Int, page).query(`
             USE TMPRD;
 
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
@@ -702,22 +795,27 @@ export default class Model {
             OFFSET @pageSize * (@pageNumber - 1) ROWS
             FETCH NEXT @pageSize ROWS ONLY;
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   async getCountClientsFilter(sellerCod:string = '',dateIni:string,sellerCod1:string = sellerCod,filter:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCod)
-         .input('FILTER',VarChar, `%${filter}%`)
-         .input('VENDEDOR1',VarChar, sellerCod1)
-         .input('DATEINI',VarChar,dateIni)
-         .query(`
+  async getCountClientsFilter(
+    sellerCod: string = '',
+    dateIni: string,
+    sellerCod1: string = sellerCod,
+    filter: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCod)
+        .input('FILTER', VarChar, `%${filter}%`)
+        .input('VENDEDOR1', VarChar, sellerCod1)
+        .input('DATEINI', VarChar, dateIni).query(`
             USE TMPRD;
 
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
@@ -754,24 +852,30 @@ export default class Model {
 
             SELECT COUNT(*) AS 'CONT' FROM #REGISTER
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   
-   //RETORNA TODAS MOVIMENTACOES DO CLIENTE
-   async getClient(sellerCod:string,sellerCod1:string,date:string,loja:string,clientCod:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCod)
-         .input('VENDEDOR1',VarChar, sellerCod1)
-         .input('DATE',VarChar,date)
-         .input('LOJA',VarChar,loja)
-         .input('CLIENTE',VarChar,clientCod)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  // RETORNA TODAS MOVIMENTACOES DO CLIENTE
+  async getClient(
+    sellerCod: string,
+    sellerCod1: string,
+    date: string,
+    loja: string,
+    clientCod: string,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCod)
+        .input('VENDEDOR1', VarChar, sellerCod1)
+        .input('DATE', VarChar, date)
+        .input('LOJA', VarChar, loja)
+        .input('CLIENTE', VarChar, clientCod).query(`
             USE TMPRD;
             SELECT
                CAST(F2_EMISSAO AS DATE) AS F2_EMISSAO,
@@ -789,23 +893,29 @@ export default class Model {
             ORDER BY
                F2_EMISSAO
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   //RETORNA DADOS DE DEVOLUCAO
-   async getSD1(sellerCodIni:string,sellerCodFim:string,dateIni:string,dateFim:string,groupSeller:boolean=false){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('VENDEDOR',VarChar, sellerCodIni)
-         .input('VENDEDOR1',VarChar, sellerCodFim)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+  // RETORNA DADOS DE DEVOLUCAO
+  async getSD1(
+    sellerCodIni: string,
+    sellerCodFim: string,
+    dateIni: string,
+    dateFim: string,
+    groupSeller: boolean = false,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('VENDEDOR', VarChar, sellerCodIni)
+        .input('VENDEDOR1', VarChar, sellerCodFim)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
 
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
@@ -815,7 +925,7 @@ export default class Model {
             SELECT
                CAST(D1_DTDIGIT AS DATE) AS 'D1_DTDIGIT',
                SUM(D1_TOTAL) AS 'D1_TOTAL'
-               ${groupSeller ?",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME":""}
+               ${groupSeller ? ",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME" : ''}
             FROM
                SD1010 (NOLOCK)
             
@@ -845,25 +955,32 @@ export default class Model {
             
             GROUP BY
                D1_DTDIGIT
-               ${groupSeller?", F2_VEND1":""}
+               ${groupSeller ? ', F2_VEND1' : ''}
             ;
          `)
-         return result.recordset;
-      }catch(err:any){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   //RETORNA DADOS DE
-   async getSD2(sellerCod:string,sellerCod1:string,dateIni:string,dateFim:string,groupSeller:boolean){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar, sellerCod)
-         .input('SELLER1',VarChar, sellerCod1)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+      return result.recordset
+    } catch (err: any) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  // RETORNA DADOS DE
+  async getSD2(
+    sellerCod: string,
+    sellerCod1: string,
+    dateIni: string,
+    dateFim: string,
+    groupSeller: boolean,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, sellerCod)
+        .input('SELLER1', VarChar, sellerCod1)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
             IF OBJECT_ID('tempdb..#FILIAIS') IS NOT NULL DROP TABLE #FILIAIS;
             
@@ -873,7 +990,7 @@ export default class Model {
                SUM(D2_TOTAL) D2_TOTAL,
                SUM(D2_CUSTO1) D2_CUSTO1,
                CAST(D2_EMISSAO AS DATE) AS D2_EMISSAO
-               ${groupSeller ? ",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME": ""}
+               ${groupSeller ? ",(SELECT A3_NOME FROM SA3010 (NOLOCK) WHERE SA3010.D_E_L_E_T_='' AND A3_COD = F2_VEND1) AS A3_NOME" : ''}
             FROM
                SF2010 (NOLOCK)
                INNER JOIN SD2010 (NOLOCK)
@@ -893,25 +1010,25 @@ export default class Model {
                AND F2_TIPO = 'N'
             GROUP BY
                D2_EMISSAO
-               ${groupSeller ? ", F2_VEND1":""}
+               ${groupSeller ? ', F2_VEND1' : ''}
             ORDER BY
                D2_EMISSAO;
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 
-   async getSC6(order:string,filial:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('PEDIDO',VarChar, order)
-         .input('FILIAL',VarChar,filial)
-         .query(`
+  async getSC6(order: string, filial: string) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('PEDIDO', VarChar, order)
+        .input('FILIAL', VarChar, filial).query(`
             USE TMPRD;
             SELECT
                C6_ITEM,
@@ -928,19 +1045,18 @@ export default class Model {
                AND C6_NUM = @PEDIDO
                AND C6_FILIAL = @FILIAL
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-         
-   async getSYS_GROUP(userId:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('USUARIO',VarChar, userId)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSYS_GROUP(userId: string) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool.request().input('USUARIO', VarChar, userId)
+        .query(`
             USE TMPRD;
             SELECT
                USR_GRUPO
@@ -950,18 +1066,18 @@ export default class Model {
                USR_ID = @USUARIO
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getSYS_USR_COD(userId:string){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('USUARIO',VarChar, userId)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSYS_USR_COD(userId: string) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool.request().input('USUARIO', VarChar, userId)
+        .query(`
             USE TMPRD;
             SELECT
                USR_ID
@@ -971,17 +1087,17 @@ export default class Model {
                USR_ID = @USUARIO OR USR_CODIGO = @USUARIO
                
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getSA3(){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getSA3() {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool.request().query(`
             USE TMPRD;
             SELECT
                A3_COD,
@@ -993,34 +1109,40 @@ export default class Model {
             ORDER BY
                A3_NOME
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
-   async getCountSC5(seller:string,dateIni:string,dateFim:string,existOrder:boolean){
-      try{
-         const pool = await new ConnectionPool(config).connect();
-         const result = await pool.request()
-         .input('SELLER',VarChar,seller)
-         .input('DATE',VarChar,dateIni)
-         .input('DATE1',VarChar,dateFim)
-         .query(`
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
+
+  async getCountSC5(
+    seller: string,
+    dateIni: string,
+    dateFim: string,
+    existOrder: boolean,
+  ) {
+    try {
+      const pool = await new ConnectionPool(config).connect()
+      const result = await pool
+        .request()
+        .input('SELLER', VarChar, seller)
+        .input('DATE', VarChar, dateIni)
+        .input('DATE1', VarChar, dateFim).query(`
             USE TMPRD;
             SELECT
                COUNT(*) AS 'TOTAL'
             FROM
                SC5010 (NOLOCK)
             WHERE
-               SC5010.D_E_L_E_T_='${existOrder?'':'*'}'
+               SC5010.D_E_L_E_T_='${existOrder ? '' : '*'}'
                AND C5_EMISSAO BETWEEN @DATE AND @DATE1
                AND C5_VEND1 = @SELLER
          `)
-         return result.recordset;
-      }catch(err){
-         console.error('Erro ao executar a consulta:', err);
-         throw err;
-      }
-   }
+      return result.recordset
+    } catch (err) {
+      console.error('Erro ao executar a consulta:', err)
+      throw err
+    }
+  }
 }

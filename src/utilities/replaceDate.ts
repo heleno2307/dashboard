@@ -1,3 +1,3 @@
-export const replaceDate = (value:string)=>{
-   return value.replace(/-/g,'');
+export const replaceDate = (value: string) => {
+  return value.replace(/-/g, '')
 }
