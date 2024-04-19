@@ -1,5 +1,3 @@
-import Model from '@/model/mainModel'
-import { subtrairDias } from '@/utilities/subtrairDias'
 import {
   addMonths,
   differenceInDays,
@@ -7,6 +5,9 @@ import {
   format,
   parseISO,
 } from 'date-fns'
+
+import Model from '@/model/mainModel'
+import { subtrairDias } from '@/utilities/subtrairDias'
 
 const model = new Model()
 
@@ -28,6 +29,7 @@ type Sales = {
   C5_CONDPAG: string
   E4_DESCRI: string
   C5_NOTA: string
+
   C5_EMISSAO: string
   C5_ZSTOSS: string
   C5_FILIAL: string
@@ -111,7 +113,7 @@ export default class Controller {
       !dateIni.trim() ||
       !dateFim.trim() ||
       admin == null ||
-      admin == undefined
+      admin === undefined
     )
       return 401
 
@@ -210,10 +212,10 @@ export default class Controller {
     page: number = 1,
     limitUser: number = 15,
   ) {
-    if (!filter.trim() || admin == null || admin == undefined) return 401
+    if (!filter.trim() || admin == null || admin === undefined) return 401
 
     if (admin) {
-      if (filter.trim().toUpperCase() == 'NF') {
+      if (filter.trim().toUpperCase() === 'NF') {
         try {
           const registerData = await model.getCountSalesNf(
             '',
@@ -256,8 +258,8 @@ export default class Controller {
           return 402
         }
       } else if (
-        filter.trim().toUpperCase() == 'ADD' ||
-        filter.trim().toUpperCase() == 'ALT'
+        filter.trim().toUpperCase() === 'ADD' ||
+        filter.trim().toUpperCase() === 'ALT'
       ) {
         try {
           const registerData = await model.getCountSalesAdd(
@@ -346,7 +348,7 @@ export default class Controller {
         }
       }
     } else {
-      if (filter.trim().toUpperCase() == 'NF') {
+      if (filter.trim().toUpperCase() === 'NF') {
         try {
           const userCod = await this.getSellerCod()
           const registerData = await model.getCountSalesNf(
@@ -391,8 +393,8 @@ export default class Controller {
           return 402
         }
       } else if (
-        filter.trim().toUpperCase() == 'ADD' ||
-        filter.trim().toUpperCase() == 'ALT'
+        filter.trim().toUpperCase() === 'ADD' ||
+        filter.trim().toUpperCase() === 'ALT'
       ) {
         try {
           const userCod = await this.getSellerCod()
@@ -499,7 +501,7 @@ export default class Controller {
       !dateIni ||
       !dateFim ||
       admin == null ||
-      admin == undefined ||
+      admin === undefined ||
       !filter.trim()
     )
       return 401
@@ -601,7 +603,7 @@ export default class Controller {
     admin: boolean,
     seller: string = '',
   ) {
-    if (!date || admin == null || admin == undefined) return 401
+    if (!date || admin == null || admin === undefined) return 401
 
     try {
       if (admin) {
@@ -612,7 +614,7 @@ export default class Controller {
         )
         return data
       } else {
-        const userCod = seller != '' ? seller : await this.getSellerCod()
+        const userCod = seller !== '' ? seller : await this.getSellerCod()
         const data: CurrentDevolution[] = await model.getDevolutionDatails(
           userCod,
           userCod,
@@ -637,7 +639,7 @@ export default class Controller {
     page: number = 1,
     limitUser: number = 15,
   ) {
-    if (admin == null || admin == undefined) return 401
+    if (admin == null || admin === undefined) return 401
     const date180 = subtrairDias(180)
 
     if (admin) {
@@ -727,7 +729,7 @@ export default class Controller {
     limitUser: number = 15,
     filter: string,
   ) {
-    if (admin == null || admin == undefined) return 401
+    if (admin == null || admin === undefined) return 401
     const date180 = subtrairDias(180)
 
     if (admin) {
@@ -820,7 +822,7 @@ export default class Controller {
 
   // RETORNA CALCULO DE VARIAÇÃO DE COMPRA DE UM CLIENTE
   async getClient(codClient: string, loja: string, admin: boolean) {
-    if (admin == null || admin == undefined || !codClient || !loja) return 401
+    if (admin == null || admin === undefined || !codClient || !loja) return 401
 
     try {
       const userCod = await this.getSellerCod()
@@ -905,11 +907,11 @@ export default class Controller {
   async getInitial(
     dateIni: string,
     dateFim: string,
-    admin: boolean,
+    admin: boolean = false,
     seller: string = '',
   ) {
-    if (!dateIni || !dateFim || admin == null || admin == undefined) return 401
-
+    if (!dateIni || !dateFim || admin == null || admin === undefined) return 401
+    console.log(admin)
     let devolutions: SD1[]
     let sales: SD2[]
     let margemMes: number = 0
@@ -930,7 +932,7 @@ export default class Controller {
       }
     } else {
       try {
-        const userCod = seller != '' ? seller : await this.getSellerCod()
+        const userCod = seller !== '' ? seller : await this.getSellerCod()
         devolutions = await model.getSD1(
           userCod,
           userCod,
@@ -953,7 +955,7 @@ export default class Controller {
       custoMes += el.D2_CUSTO1
       totalSalesMes += el.D2_TOTAL
 
-      if (date.getDate() == date1.getDate()) {
+      if (date.getDate() === date1.getDate()) {
         custoDia += el.D2_CUSTO1
         totalSalesDia += el.D2_TOTAL
       }
@@ -966,7 +968,7 @@ export default class Controller {
 
       totalDevolutionMes += el.D1_TOTAL
 
-      if (date.getDate() == date1.getDate()) {
+      if (date.getDate() === date1.getDate()) {
         totalDevolutionDia += el.D1_TOTAL
       }
     })
@@ -1013,7 +1015,7 @@ export default class Controller {
       const USR_GROUP = await model.getSYS_GROUP(user)
 
       USR_GROUP.forEach((el) => {
-        if (el.USR_GRUPO == '000022') {
+        if (el.USR_GRUPO === '000022') {
           admin = true
         }
       })

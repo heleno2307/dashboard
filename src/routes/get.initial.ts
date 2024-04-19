@@ -1,38 +1,51 @@
-import axios, { AxiosError } from 'axios'
+import { api } from '@/lib/axios'
 
-const getInitial = async (
-  user: string,
-  dateIni: string,
-  dateFim: string,
-  admin: boolean = false,
-  seller: string = '',
-) => {
-  try {
-    const response = await axios.post(`/api/initial/${user}`, {
+type GetInitialResponse = {
+  SD1: {
+    D1_DTDIGIT: string
+    D1_TOTAL: number
+  }[]
+  SD2: {
+    D2_TOTAL: number
+    D2_CUSTO1: number
+    D2_EMISSAO: string
+  }[]
+  MES: {
+    MARGEM_MES: number
+    SD1_TOTAL: number
+    SD2_TOTAL: number
+  }
+  DIA: {
+    MARGEM_DIA: number
+    SD1_TOTAL: number
+    SD2_TOTAL: number
+    SD2_LIQUIDO: number
+  }
+}
+
+interface GetNameProps {
+  user: string
+  dateIni: string
+  dateFim: string
+  admin: boolean
+  seller?: string
+}
+const getInitial = async ({
+  admin = false,
+  dateIni,
+  seller = '',
+  user,
+  dateFim,
+}: GetNameProps) => {
+  const response = await api.get<GetInitialResponse>(`/api/initial/${user}`, {
+    params: {
       dateIni,
       dateFim,
       admin,
       seller,
-    })
-    return response.data
-  } catch (e: unknown) {
-    if (axios.isAxiosError(e)) {
-      const axiosError = e as AxiosError
-      if (axiosError.response?.status === 404) {
-        // Rejeitar a Promise com o valor 404
-        return Promise.reject(404)
-      } else if (axiosError.response?.status == 500) {
-        return Promise.reject(500)
-      } else if (axiosError.response?.status == 401) {
-        return Promise.reject(401)
-      } else if (axiosError.response?.status == 402) {
-        return Promise.reject(402)
-      }
-    } else {
-      console.error('Erro desconhecido:', e)
-      return null
-    }
-  }
+    },
+  })
+  return response.data
 }
 
 export default getInitial

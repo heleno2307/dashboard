@@ -1,17 +1,19 @@
-import { RiLockPasswordLine } from 'react-icons/ri'
-import { FaUser } from 'react-icons/fa'
-import { CiLogin } from 'react-icons/ci'
 import Image from 'next/image'
-import logo from '../../../public/logo.png'
-import style from './Login.module.scss'
+import { useRouter } from 'next/router'
 import { FormEvent, useRef, useState } from 'react'
+import { CiLogin } from 'react-icons/ci'
+import { FaUser } from 'react-icons/fa'
 import { ImSpinner2 } from 'react-icons/im'
-import getUser from '@/routes/getUser'
-import Toast from '../Toast/Toast'
+import { RiLockPasswordLine } from 'react-icons/ri'
+
 import { useToast } from '@/context/toastContext'
 import { useUserContext } from '@/context/userContext'
-import { useRouter } from 'next/router'
 import getAdmin from '@/routes/getAdmin'
+import getUser from '@/routes/getUser'
+
+import logo from '../../../public/logo.png'
+import Toast from '../Toast/Toast'
+import style from './Login.module.scss'
 
 type Data = {
   access_token: string

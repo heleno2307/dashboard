@@ -1,6 +1,7 @@
+import Head from 'next/head'
+
 import Login from '@/components/Login/Login'
 import { ToastProvider } from '@/context/toastContext'
-import Head from 'next/head'
 
 export default function Home() {
   return (

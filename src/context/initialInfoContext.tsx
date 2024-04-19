@@ -1,27 +1,25 @@
 import {
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from 'react'
-
-import { useUserContext } from './userContext'
-import { getInitialDate } from '@/utilities/getInitialDate'
-import { getDate } from '@/utilities/getDate'
 import { ImSpinner8 } from 'react-icons/im'
-import style from './initial.module.scss'
+
 import Toast from '@/components/Toast/Toast'
-import { useToast } from './toastContext'
-import { useAllContext } from './allContext'
 import getInitial from '@/routes/get.initial'
+import { getDate } from '@/utilities/getDate'
+import { getInitialDate } from '@/utilities/getInitialDate'
+
+import { useAllContext } from './allContext'
+import style from './initial.module.scss'
+import { useToast } from './toastContext'
+import { useUserContext } from './userContext'
 
 type Props = {
   children: ReactNode
-}
-type InitialContext = {
-  initial: Initial
 }
 type Initial = {
   SD1: {
@@ -45,6 +43,9 @@ type Initial = {
     SD2_LIQUIDO: number
   }
 }
+type InitialContext = {
+  initial: Initial
+}
 
 const initialContext = createContext<InitialContext | null>(null)
 
@@ -57,7 +58,14 @@ const InitialProvider = ({ children }: Props) => {
   const fetchData = useCallback(async () => {
     if (!user) return
     try {
-      const data = await getInitial(user.code, getInitialDate(), getDate(), all)
+      const data = await getInitial({
+        admin: all,
+        dateIni: getInitialDate(),
+        dateFim: getDate(),
+        user: user.code,
+        seller: '',
+      })
+
       if (data.SD2) {
         setInitial(data)
       }

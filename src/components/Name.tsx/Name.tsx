@@ -1,8 +1,9 @@
+import { useCallback, useEffect, useState } from 'react'
+
 import { useToast } from '@/context/toastContext'
 import { useUserContext } from '@/context/userContext'
 import getName from '@/routes/getName'
 import capitalizeNames from '@/utilities/capitalizeNames'
-import { useCallback, useEffect, useState } from 'react'
 
 type Data = [
   {
