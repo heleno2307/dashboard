@@ -1,36 +1,35 @@
-import axios, { AxiosError } from 'axios'
+import { api } from '@/lib/axios'
 
+type GetClientsResponse = {
+  SA1: {
+    TOTAL: number
+    D2_CLIENTE: string
+    NOME: string
+    A1_ULTCOM: string
+    A1_TEL: string
+    A1_EMAIL: string
+    A1_LOJA: string
+  }[]
+  last_Page: number
+  next_page: number
+  page: number
+  qtd_register: number
+  qtd_result: number
+}
 const getClients = async (
   user: string,
   admin: boolean = false,
   page: number = 1,
   limit: number = 15,
 ) => {
-  try {
-    const response = await axios.post(`/api/clients/${user}`, {
+  const response = await api.get<GetClientsResponse>(`/api/clients/${user}`, {
+    params: {
       admin,
       page,
       limit,
-    })
-    return response.data
-  } catch (e: unknown) {
-    if (axios.isAxiosError(e)) {
-      const axiosError = e as AxiosError
-      if (axiosError.response?.status === 404) {
-        // Rejeitar a Promise com o valor 404
-        return Promise.reject(404)
-      } else if (axiosError.response?.status == 500) {
-        return Promise.reject(500)
-      } else if (axiosError.response?.status == 401) {
-        return Promise.reject(401)
-      } else if (axiosError.response?.status == 402) {
-        return Promise.reject(402)
-      }
-    } else {
-      console.error('Erro desconhecido:', e)
-      return null
-    }
-  }
+    },
+  })
+  return response.data
 }
 
 export default getClients

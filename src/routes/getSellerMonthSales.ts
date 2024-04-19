@@ -1,34 +1,34 @@
-import axios, { AxiosError } from 'axios'
+import { api } from '@/lib/axios'
 
+interface GetSellerMonthSalesResponse {
+  SD1: {
+    nome: string
+    ano: string
+    mes: string
+    total: number
+  }[]
+  SD2: {
+    nome: string
+    ano: string
+    mes: string
+    total: number
+  }[]
+}
 const getSellerMonthSales = async (
   user: string,
   dateIni: string,
   dateFim: string,
 ) => {
-  try {
-    const response = await axios.post(`/api/sellerSalesMonths/${user}`, {
-      dateIni,
-      dateFim,
-    })
-    return response.data
-  } catch (e: unknown) {
-    if (axios.isAxiosError(e)) {
-      const axiosError = e as AxiosError
-      if (axiosError.response?.status === 404) {
-        // Rejeitar a Promise com o valor 404
-        return Promise.reject(404)
-      } else if (axiosError.response?.status == 500) {
-        return Promise.reject(500)
-      } else if (axiosError.response?.status == 401) {
-        return Promise.reject(401)
-      } else if (axiosError.response?.status == 402) {
-        return Promise.reject(402)
-      }
-    } else {
-      console.error('Erro desconhecido:', e)
-      return null
-    }
-  }
+  const response = await api.get<GetSellerMonthSalesResponse>(
+    `/api/sellerSalesMonths/${user}`,
+    {
+      params: {
+        dateIni,
+        dateFim,
+      },
+    },
+  )
+  return response.data
 }
 
 export default getSellerMonthSales

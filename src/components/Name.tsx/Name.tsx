@@ -42,7 +42,7 @@ const Name = () => {
   const fetchData = useCallback(async () => {
     if (user != null) {
       try {
-        const data: Data = await getName(user.code)
+        const data = await getName(user.code)
         checkData(data)
       } catch (error) {
         hendlerError(error)

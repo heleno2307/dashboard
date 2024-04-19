@@ -1,26 +1,21 @@
-import { useCallback, useEffect, useState } from 'react'
-import styles from './YearsChartSales.module.scss'
-import getSalesYears from '@/routes/getYearsSales'
-import { useUserContext } from '@/context/userContext'
-import dynamic from 'next/dynamic'
 import { ApexOptions } from 'apexcharts'
-import { useSellerContext } from '@/context/sellerContext'
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useState } from 'react'
 import { FiBarChart } from 'react-icons/fi'
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { MdShowChart } from 'react-icons/md'
 import { RiBarChartLine } from 'react-icons/ri'
+
+import { useSellerContext } from '@/context/sellerContext'
 import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getSalesYears from '@/routes/getYearsSales'
+
+import styles from './YearsChartSales.module.scss'
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 })
-
-interface DataFetch {
-  SD1: SD1[]
-  SD2: SD2[]
-  lengthDate: number
-  months: string[]
-}
 interface SD1 {
   mes: string
   ano: string
@@ -30,6 +25,12 @@ interface SD2 {
   mes: string
   ano: string
   total: number
+}
+interface DataFetch {
+  SD1: SD1[]
+  SD2: SD2[]
+  lengthDate: number
+  months: string[]
 }
 
 export default function YearsChatSales() {
@@ -112,7 +113,7 @@ export default function YearsChatSales() {
   }, [fetchData])
 
   const hendlerClickAlterTypeChart = () => {
-    if (charType == 'bar') {
+    if (charType === 'bar') {
       setChartType('line')
     } else {
       setChartType('bar')
@@ -228,14 +229,14 @@ export default function YearsChatSales() {
       <div className={styles.iconsChartDiv}>
         <FiBarChart
           className={`${styles.iconsChart} ${
-            charType == 'bar' ? styles.active : null
+            charType === 'bar' ? styles.active : null
           }`}
           onClick={hendlerClickAlterTypeChart}
           title="Gráfico de Barras"
         />
         <MdShowChart
           className={`${styles.iconsChart} ${
-            charType == 'line' ? styles.active : null
+            charType === 'line' ? styles.active : null
           }`}
           onClick={hendlerClickAlterTypeChart}
           title="Gráfico de Linha"
@@ -246,7 +247,7 @@ export default function YearsChatSales() {
           title="Fazer Média diária"
         />
       </div>
-      {charType == 'bar' && (
+      {charType === 'bar' && (
         <Chart
           options={options}
           series={series}
@@ -255,7 +256,7 @@ export default function YearsChatSales() {
           height={'400px'}
         />
       )}
-      {charType == 'line' && (
+      {charType === 'line' && (
         <Chart
           options={options}
           series={series}

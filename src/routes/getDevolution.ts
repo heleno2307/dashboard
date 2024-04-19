@@ -1,36 +1,28 @@
-import axios, { AxiosError } from 'axios'
+import { api } from '@/lib/axios'
 
+type GetDevolutionResponse = {
+  D1_FILIAL: string
+  D1_DOC: string
+  D1_TOTAL: number
+  D2_DOC: string
+  D2_EMISSAO: string
+  A1_NOME: string
+  C5_VEND1: string
+  A3_NOME: string
+}[]
 const getDevolution = async (
   user: string,
   date: string,
   admin: boolean,
   seller: string = '',
 ) => {
-  try {
-    const response = await axios.post(`/api/devolution/${user}`, {
-      date,
-      admin,
-      seller,
-    })
-    return response.data
-  } catch (e: unknown) {
-    if (axios.isAxiosError(e)) {
-      const axiosError = e as AxiosError
-      if (axiosError.response?.status === 404) {
-        // Rejeitar a Promise com o valor 404
-        return Promise.reject(404)
-      } else if (axiosError.response?.status == 500) {
-        return Promise.reject(500)
-      } else if (axiosError.response?.status == 401) {
-        return Promise.reject(401)
-      } else if (axiosError.response?.status == 402) {
-        return Promise.reject(402)
-      }
-    } else {
-      console.error('Erro desconhecido:', e)
-      return null
-    }
-  }
+  const response = await api.get<GetDevolutionResponse>(
+    `/api/devolution/${user}`,
+    {
+      params: { date, admin, seller },
+    },
+  )
+  return response.data
 }
 
 export default getDevolution

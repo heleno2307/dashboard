@@ -1,9 +1,11 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import styles from './SelectSeller.module.scss'
-import getSeller from '@/routes/getSeller'
-import { useUserContext } from '@/context/userContext'
+
 import { useSellerContext } from '@/context/sellerContext'
 import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getSeller from '@/routes/getSeller'
+
+import styles from './SelectSeller.module.scss'
 
 interface SA3 {
   A3_COD: string
@@ -14,7 +16,7 @@ export default function SelectSeller() {
   const [option, setOption] = useState<SA3[]>([])
   const [selectedOption, setSelectedOption] = useState<string>('')
   const { user } = useUserContext()
-  const { handlerSeller, seller } = useSellerContext()
+  const { handlerSeller } = useSellerContext()
   const { showToast } = useToast()
 
   const dataFetch = useCallback(async () => {

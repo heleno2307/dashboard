@@ -1,15 +1,17 @@
-import { useUserContext } from '@/context/userContext'
-import style from './Clients.module.scss'
-import getClients from '@/routes/getClients'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ImSpinner8 } from 'react-icons/im'
-import Popup from '../Popup/Popup'
-import Client from '../Client/Client'
-import Toast from '../Toast/Toast'
-import { useToast } from '@/context/toastContext'
+
 import { useAllContext } from '@/context/allContext'
-import ClientsList from './ClientsList'
+import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getClients from '@/routes/getClients'
 import getClientsFilter from '@/routes/getClientsFilter'
+
+import Client from '../Client/Client'
+import Popup from '../Popup/Popup'
+import Toast from '../Toast/Toast'
+import style from './Clients.module.scss'
+import ClientsList from './ClientsList'
 
 type ClientType = {
   TOTAL: number
@@ -22,9 +24,9 @@ type ClientType = {
 }
 const Clients = () => {
   const { user } = useUserContext()
-  const [clients, setClients] = useState<ClientType[] | null>(null)
-  const [clientsAux, setClientsAux] = useState<ClientType[] | null>(null)
-  const [client, setclient] = useState<ClientType | null>(null)
+  const [clients, setClients] = useState<ClientType[] | null>([])
+  const [clientsAux, setClientsAux] = useState<ClientType[] | null>([])
+  const [client, setclient] = useState<ClientType | null>()
   const [popup, setPopup] = useState(false)
   const [page, setPage] = useState(1)
   const [lastPage, setLastPage] = useState(0)
@@ -73,8 +75,8 @@ const Clients = () => {
         // Se for um array (clientes), atualize o estado de clientes
         setClients(data.SA1)
         setClientsAux(data.SA1)
-        setLastPage(() => (!data.last_Page ? 1 : data.last_Page))
-        setPage(() => (!data.next_page ? 0 : data.next_page))
+        setLastPage(!data.last_Page ? 1 : data.last_Page)
+        setPage(!data.next_page ? 0 : data.next_page)
       }
     } catch (error) {
       // tratar erro
@@ -94,8 +96,8 @@ const Clients = () => {
         const data = await getClients(user, all, page)
         if (Array.isArray(data.SA1)) {
           // Se for um array (clientes), atualize o estado de clientes
-          setClients((current: any) => [...current, ...data.SA1])
-          setClientsAux((current: any) => [...current, ...data.SA1])
+          setClients((current) => [...current, ...data.SA1])
+          setClientsAux((current) => [...current, ...data.SA1])
           setLastPage(() => data.last_Page)
           setPage(() => data.next_page)
         }
@@ -116,7 +118,7 @@ const Clients = () => {
         threshold: 0.5,
       }
 
-      const callback: IntersectionObserverCallback = (entries, observer) => {
+      const callback: IntersectionObserverCallback = (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (lastPage > page && user) {
@@ -149,16 +151,16 @@ const Clients = () => {
   // filtrar cliente de acordo com o valor do input
   const hendlerClientFilter = async (filter: string) => {
     if (!user) return
-    setClients(null)
+    setClients([])
 
-    if (filter.trim() != '') {
+    if (filter.trim() !== '') {
       try {
         const data = await getClientsFilter(user.code, all, filter)
 
         if (Array.isArray(data.SA1)) {
           setClients(data.SA1)
-          setLastPage((current) => (!data.last_Page ? 0 : data.last_Page))
-          setPage((current) => (!data.next_page ? 0 : data.next_page))
+          setLastPage(!data.last_Page ? 0 : data.last_Page)
+          setPage(!data.next_page ? 0 : data.next_page)
         }
       } catch (error) {
         // tratar error
@@ -171,8 +173,8 @@ const Clients = () => {
 
         if (Array.isArray(data.SA1)) {
           setClients(data.SA1)
-          setLastPage((current) => (!data.last_Page ? 0 : data.last_Page))
-          setPage((current) => (!data.next_page ? 0 : data.next_page))
+          setLastPage(!data.last_Page ? 0 : data.last_Page)
+          setPage(!data.next_page ? 0 : data.next_page)
         }
       } catch (error) {
         // tratar error
@@ -202,7 +204,7 @@ const Clients = () => {
               className={style.input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key == 'Enter') {
+                if (e.key === 'Enter') {
                   hendlerClientFilter(input)
                 }
               }}

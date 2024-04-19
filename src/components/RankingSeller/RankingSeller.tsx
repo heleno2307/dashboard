@@ -1,13 +1,15 @@
 import { ApexOptions } from 'apexcharts'
 import dynamic from 'next/dynamic'
-import styles from './RankingSeller.module.scss'
 import { useCallback, useEffect, useState } from 'react'
-import getSellerMonthSales from '@/routes/getSellerMonthSales'
-import { useUserContext } from '@/context/userContext'
-import capitalizeNames from '@/utilities/capitalizeNames'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { RiBarChartLine } from 'react-icons/ri'
+
 import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getSellerMonthSales from '@/routes/getSellerMonthSales'
+import capitalizeNames from '@/utilities/capitalizeNames'
+
+import styles from './RankingSeller.module.scss'
 
 interface SD {
   nome: string

@@ -1,5 +1,29 @@
-import axios, { AxiosError } from 'axios'
+import { api } from '@/lib/axios'
 
+interface GetInputFilterResponse {
+  last_Page: number
+  page: number
+  next_page: number
+  qtd_register: number
+  qtd_result: number
+  SC5: {
+    C5_NOMECLI: string
+    C5_CLIENTE: string
+    C5_CONDPAG: string
+    E4_DESCRI: string
+    C5_NOTA: string
+    C5_EMISSAO: string
+    C5_ZSTSOSS: string
+    C5_FILIAL: string
+    C5_ZSEPARA: string
+    C5_ZHORA: string
+    C6_VALOR: number
+    USR_CODIGO: string
+    C5_NUM: string
+    C5_ZVERSAO: string
+    C5_TRANSP: string
+  }[]
+}
 const getInputFilter = async (
   user: string,
   dateIni: string,
@@ -9,34 +33,20 @@ const getInputFilter = async (
   page: number = 1,
   limit: number = 15,
 ) => {
-  try {
-    const response = await axios.post(`/api/salesFilterInput/${user}`, {
-      dateIni,
-      dateFim,
-      admin,
-      page,
-      limit,
-      filter,
-    })
-    return response.data
-  } catch (e: unknown) {
-    if (axios.isAxiosError(e)) {
-      const axiosError = e as AxiosError
-      if (axiosError.response?.status === 404) {
-        // Rejeitar a Promise com o valor 404
-        return Promise.reject(404)
-      } else if (axiosError.response?.status == 500) {
-        return Promise.reject(500)
-      } else if (axiosError.response?.status == 401) {
-        return Promise.reject(401)
-      } else if (axiosError.response?.status == 402) {
-        return Promise.reject(402)
-      }
-    } else {
-      console.error('Erro desconhecido:', e)
-      return null
-    }
-  }
+  const response = await api.get<GetInputFilterResponse>(
+    `/api/salesFilterInput/${user}`,
+    {
+      params: {
+        dateIni,
+        dateFim,
+        admin,
+        page,
+        limit,
+        filter,
+      },
+    },
+  )
+  return response.data
 }
 
 export default getInputFilter

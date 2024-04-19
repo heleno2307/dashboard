@@ -1,13 +1,15 @@
-import style from './Devolution.module.scss'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ImSpinner8 } from 'react-icons/im'
+
+import { useAllContext } from '@/context/allContext'
+import { useToast } from '@/context/toastContext'
 import { useUserContext } from '@/context/userContext'
 import getDevolution from '@/routes/getDevolution'
 import { getDate } from '@/utilities/getDate'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { newDate } from '@/utilities/newDate'
 import { replaceDate } from '@/utilities/replaceDate'
-import { ImSpinner8 } from 'react-icons/im'
-import { useToast } from '@/context/toastContext'
-import { useAllContext } from '@/context/allContext'
+
+import style from './Devolution.module.scss'
 
 type CurrentDevolution = {
   D1_FILIAL: string
@@ -82,14 +84,9 @@ const Devolution = ({ seller }: Props) => {
 
       if (Array.isArray(data)) {
         setDevolution(data)
-      } else if (data && data.erro) {
-        setDevolution(saveData)
-        showToast('info', 'Erro 01, contactar o administrador', 4000)
-      } else {
-        console.log('entrou')
       }
     } catch (error) {
-      // tratar error
+      setDevolution(saveData)
     }
   }
 

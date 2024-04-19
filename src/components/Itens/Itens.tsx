@@ -1,11 +1,13 @@
-import style from './Itens.module.scss'
+import { useCallback, useEffect, useState } from 'react'
+import { ImSpinner8 } from 'react-icons/im'
+
+import { useOrderContext } from '@/context/orderContext'
+import { useToast } from '@/context/toastContext'
 import { useUserContext } from '@/context/userContext'
 import getItens from '@/routes/getItens'
-import { useCallback, useEffect, useState } from 'react'
 import limitarCaracteres from '@/utilities/limitarCaracteres'
-import { ImSpinner8 } from 'react-icons/im'
-import { useToast } from '@/context/toastContext'
-import { useOrderContext } from '@/context/orderContext'
+
+import style from './Itens.module.scss'
 
 type SC6 = {
   C6_ITEM: string

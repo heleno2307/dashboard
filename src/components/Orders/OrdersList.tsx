@@ -1,7 +1,9 @@
 import { Dispatch, FC, RefObject, SetStateAction } from 'react'
-import style from './Orders.module.scss'
-import { newDate } from '@/utilities/newDate'
+
 import { useOrderContext } from '@/context/orderContext'
+import { newDate } from '@/utilities/newDate'
+
+import style from './Orders.module.scss'
 
 interface Props {
   setPopup: Dispatch<SetStateAction<boolean>>

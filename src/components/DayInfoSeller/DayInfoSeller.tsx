@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-import DayInfo from '../DayInfo/DayInfo'
-import getInitial from '@/routes/get.initial'
-import { useUserContext } from '@/context/userContext'
-import { useSellerContext } from '@/context/sellerContext'
 import { format } from 'date-fns'
+import { useCallback, useEffect, useState } from 'react'
+
+import { useSellerContext } from '@/context/sellerContext'
 import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getInitial from '@/routes/get.initial'
+
+import DayInfo from '../DayInfo/DayInfo'
 
 export default function DayInfoSeller() {
   const [dayInfo, setDayInfo] = useState({})
@@ -33,7 +35,14 @@ export default function DayInfoSeller() {
     if (!user || !seller) return
     try {
       const date = format(new Date(), 'yyyyMMdd')
-      const data = await getInitial(user.code, date, date, false, seller.A3_COD)
+      const data = await getInitial({
+        admin: false,
+        dateFim: date,
+        dateIni: date,
+        user: user.code,
+        seller: seller.A3_COD,
+      })
+
       setDayInfo(data.DIA)
     } catch (error) {
       hendlerError(error)

@@ -1,11 +1,13 @@
-import { newDate } from '@/utilities/newDate'
-import style from './Client.module.scss'
-import { useUserContext } from '@/context/userContext'
 import { useCallback, useEffect, useState } from 'react'
-import getClient from '@/routes/getClient'
 import { ImSpinner8 } from 'react-icons/im'
-import { useToast } from '@/context/toastContext'
+
 import { useAllContext } from '@/context/allContext'
+import { useToast } from '@/context/toastContext'
+import { useUserContext } from '@/context/userContext'
+import getClient from '@/routes/getClient'
+import { newDate } from '@/utilities/newDate'
+
+import style from './Client.module.scss'
 
 type Client = {
   TOTAL: number
@@ -16,11 +18,12 @@ type Client = {
   A1_EMAIL: string
   A1_LOJA: string
 }
+
 type Variacao = {
   VARIACAO: number
 }
 type Props = {
-  client: Client | null
+  client: Client
 }
 
 const Client = ({ client }: Props) => {
@@ -74,7 +77,7 @@ const Client = ({ client }: Props) => {
   const alterColor = (data: Variacao) => {
     if (data.VARIACAO > 0) {
       setColor('positive')
-    } else if (data.VARIACAO == 0) {
+    } else if (data.VARIACAO === 0) {
       setColor('neutro')
     } else {
       setColor('negative')
@@ -125,9 +128,9 @@ const Client = ({ client }: Props) => {
         <p className={style.title_variacao}>Variação</p>
         <p
           className={`${style.value_variacao} 
-                  ${color == 'positive' ? style.positive : null}
-                  ${color == 'negative' ? style.negative : null}
-                  ${color == 'neutro' ? style.neutro : null}`}
+                  ${color === 'positive' ? style.positive : null}
+                  ${color === 'negative' ? style.negative : null}
+                  ${color === 'neutro' ? style.neutro : null}`}
         >
           {varicao != null ? (
             `${varicao.toFixed(2)}%`

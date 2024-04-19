@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import style from './Orders.module.scss'
-import getCurrentSales from '@/routes/getCurrentSales'
-import { useUserContext } from '@/context/userContext'
-import { replaceDate } from '@/utilities/replaceDate'
-import { getInitialDateOrder } from '@/utilities/getInitialDate'
-import { getDate } from '@/utilities/getDate'
 import { ImSpinner8 } from 'react-icons/im'
-import { useDate } from '@/hook/useDate'
-import Popup from '../Popup/Popup'
-import Itens from '../Itens/Itens'
-import Toast from '../Toast/Toast'
+
 import { useAllContext } from '@/context/allContext'
-import { OrderList } from './OrdersList'
-import getCurrentSalesFilter from '@/routes/getCurrentSalesFilter'
-import OrdersFilter from '../OrdersFilter/OrdersFilter'
 import { useOrderContext } from '@/context/orderContext'
+import { useUserContext } from '@/context/userContext'
+import getCurrentSales from '@/routes/getCurrentSales'
+import getCurrentSalesFilter from '@/routes/getCurrentSalesFilter'
+import { getDate } from '@/utilities/getDate'
+import { getInitialDateOrder } from '@/utilities/getInitialDate'
+import { replaceDate } from '@/utilities/replaceDate'
+
+import Itens from '../Itens/Itens'
 import OrderInputs from '../OrderInputs/OrderInputs'
+import OrdersFilter from '../OrdersFilter/OrdersFilter'
+import Popup from '../Popup/Popup'
+import Toast from '../Toast/Toast'
+import style from './Orders.module.scss'
+import { OrderList } from './OrdersList'
 
 const Orders = () => {
   const [popup, setPopup] = useState(false)
@@ -82,7 +83,7 @@ const Orders = () => {
       page: number,
     ) => {
       try {
-        if (filter == 'TD') {
+        if (filter === 'TD') {
           const data = await getCurrentSales(user, dateIni, dateFim, all, page)
           if (Array.isArray(data?.SC5)) {
             setSales((current: any) => [...current, ...data.SC5])
