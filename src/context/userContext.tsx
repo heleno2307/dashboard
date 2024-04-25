@@ -1,33 +1,34 @@
+import { useRouter } from 'next/router'
 import {
   createContext,
-  useCallback,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from 'react'
-
-import { useRouter } from 'next/router'
 
 type Props = {
   children: ReactNode
 }
-type UserContext = {
-  user: User | null
-  hendlerUser: (code: string, data: Data, admin: boolean) => void
-  logOut: () => void
-}
-type User = {
-  code: string
-  data: Data
-  admin: boolean
-}
+
 type Data = {
   access_token: string
   refresh_token: string
   expires_in: number
   scope: string
   token_type: string
+}
+
+type User = {
+  code: string
+  data: Data
+  admin: boolean
+}
+
+type UserContext = {
+  user: User | null
+  hendlerUser: (code: string, data: Data, admin: boolean) => void
+  logOut: () => void
 }
 
 const userContext = createContext<UserContext | null>(null)

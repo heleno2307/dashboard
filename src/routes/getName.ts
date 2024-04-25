@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios'
 
-type GetNameResponse = [
+export type GetNameResponse = [
   {
     USR_CODIGO: string
   },
