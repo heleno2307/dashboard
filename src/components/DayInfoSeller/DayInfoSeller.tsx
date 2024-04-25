@@ -7,9 +7,14 @@ import { useUserContext } from '@/context/userContext'
 import getInitial from '@/routes/get.initial'
 
 import DayInfo from '../DayInfo/DayInfo'
-
+interface DayInfo {
+  MARGEM_DIA: number
+  SD1_TOTAL: number
+  SD2_TOTAL: number
+  SD2_LIQUIDO: number
+}
 export default function DayInfoSeller() {
-  const [dayInfo, setDayInfo] = useState({})
+  const [dayInfo, setDayInfo] = useState<DayInfo | null>(null)
   const { user } = useUserContext()
   const { seller } = useSellerContext()
   const { showToast } = useToast()

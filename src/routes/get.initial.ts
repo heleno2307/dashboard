@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios'
 
-type GetInitialResponse = {
+export type GetInitialResponse = {
   SD1: {
     D1_DTDIGIT: string
     D1_TOTAL: number

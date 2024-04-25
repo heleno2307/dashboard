@@ -1,18 +1,23 @@
-import style from './DayInfo.module.scss'
+import { useState } from 'react'
+import { FiBarChart } from 'react-icons/fi'
+import { ImSpinner8 } from 'react-icons/im'
 import {
-  MdAttachMoney,
   MdArrowForwardIos,
+  MdAttachMoney,
   MdCompareArrows,
 } from 'react-icons/md'
 
-import { FiBarChart } from 'react-icons/fi'
-import { useState } from 'react'
-import { ImSpinner8 } from 'react-icons/im'
-import Popup from '../Popup/Popup'
 import Devolution from '../Devolution/Devoltion'
+import Popup from '../Popup/Popup'
+import style from './DayInfo.module.scss'
 
 interface Props {
-  initial: any
+  initial: {
+    MARGEM_DIA: number
+    SD1_TOTAL: number
+    SD2_TOTAL: number
+    SD2_LIQUIDO: number
+  } | null
   seller?: string
 }
 
